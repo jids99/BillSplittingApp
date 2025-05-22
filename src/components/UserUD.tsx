@@ -7,7 +7,7 @@ type User = {
   name: string;
 };
 
-const TestFirestoreConnection: React.FC = () => {
+const UserUD: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [editing, setEditing] = useState<User | null>(null);
 
@@ -132,4 +132,4 @@ const TestFirestoreConnection: React.FC = () => {
   );
 };
 
-export default TestFirestoreConnection;
+export default UserUD;

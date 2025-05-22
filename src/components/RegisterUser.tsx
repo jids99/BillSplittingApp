@@ -22,8 +22,8 @@ const RegisterUser: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Register user</h2>
+    <>
+      <h2>Wala ka pa?</h2>
       <input
         type="text"
         value={name}
@@ -33,7 +33,7 @@ const RegisterUser: React.FC = () => {
       <button onClick={handleAdd}>Register</button>
 
       {status && <p>{status}</p>}
-    </div>
+    </>
   );
 };
 
