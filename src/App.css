@@ -18,6 +18,14 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+table th, td {
+  padding: .5rem 1rem;
+}
+
+input, label {
+  padding: .5rem 1rem;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

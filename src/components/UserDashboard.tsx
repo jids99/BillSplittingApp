@@ -1,32 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import UserUD from './UserUD';
+import Transactions from './Transactions';
+import styles from './UserDashboard.module.css';
 
 function UserDashboard() {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  console.log('DashboardPage rendered with userId:', userId);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      if (userDoc.exists()) {
+        setUser(userDoc.data());
+      }
+    };
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const userDoc = await getDoc(doc(db, 'users', userId));
-  //     if (userDoc.exists()) {
-  //       setUser(userDoc.data());
-  //     }
-  //   };
+    fetchUser();
+  }, [userId]);
 
-  //   fetchUser();
-  // }, [userId]);
+  if (!user) return <p>Loading user...</p>;
 
-  // if (!user) return <p>Loading user...</p>;
+  return (
+    <>
+      <div className={styles.dashboardContent}>
+        <aside className={styles.header}>
+          <h1>Welcome, {user.name}</h1>
+          <button onClick={() => navigate(`/`)}> Log out </button>
+        </aside>
+        
+      <div className={styles.body}>
+        <Transactions user_id={userId} />
 
-  // return (
-  //   <div>
-  //     <h1>Welcome, {user.name}</h1>
-  //   </div>
-  // );
+        {user?.name === 'jids' && (
+          <div className="admin-panel">
+            <UserUD />
+          </div>
+        )}
+      </div>
+
+      
+      </div>
+
+    </>
+  );
+
 }
 
 export default UserDashboard;

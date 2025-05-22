@@ -56,16 +56,20 @@ const UserUD: React.FC = () => {
 
   return (
 
-    <div style={{ padding: "1rem", fontFamily: "Arial, sans-serif" }}>
-      <h2>Budol Split Users</h2>
+    <div>
 
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table>
         <thead>
+          <tr>
+            <th colSpan={3}>
+              <h2>Budol Split Users</h2>
+            </th>
+          </tr>
           <tr>
             <th hidden>ID</th>
             <th>Name</th>
             <th>Created Date</th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -80,8 +84,6 @@ const UserUD: React.FC = () => {
                 >
                   Edit
                 </button>
-              </td>
-              <td>
                 <button
                   onClick={() => deleteUser(item.id)}
                   className="bg-red-500 text-white px-2 py-1 rounded ml-2"
@@ -96,9 +98,9 @@ const UserUD: React.FC = () => {
 
       {/* Modal */}
       {editing && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg min-w-[300px]">
-            <h3 className="text-lg font-semibold mb-4">Edit Calculation</h3>
+        <div className="edit-modal">
+          <div className="edit-container">
+            <h3 className="">Edit </h3>
             <div className="mb-2">
               <label className="block">Name</label>
               <input
@@ -110,7 +112,7 @@ const UserUD: React.FC = () => {
                 className="border w-full px-2 py-1 rounded"
               />
             </div>
-            <div className="flex justify-end gap-2 mt-4">
+            <div className="btn-container">
               <button
                 className="bg-gray-300 px-3 py-1 rounded"
                 onClick={() => setEditing(null)}
