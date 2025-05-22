@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, orderBy, onSnapshot, doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 type User = {
   id: string;
@@ -82,13 +84,13 @@ const UserUD: React.FC = () => {
                   className="bg-blue-500 text-white px-2 py-1 rounded"
                   onClick={() => setEditing(item)}
                 >
-                  Edit
+                  <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
                 <button
                   onClick={() => deleteUser(item.id)}
                   className="bg-red-500 text-white px-2 py-1 rounded ml-2"
                 >
-                  Delete
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </td>
             </tr>
