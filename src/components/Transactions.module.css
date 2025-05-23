@@ -1,0 +1,18 @@
+.transactionsContainer {
+    display: flex;
+}
+
+hr {
+    margin: 0;
+    opacity: .3;
+}
+
+.amountInput {
+    width: 170.4px;
+}
+
+.thActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

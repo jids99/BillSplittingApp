@@ -20,6 +20,7 @@
 
 table th, td {
   padding: .5rem 1rem;
+  text-align: start;
 }
 
 input, label {
