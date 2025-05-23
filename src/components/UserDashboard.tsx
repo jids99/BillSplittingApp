@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
+import type { DocumentData } from 'firebase/firestore';
 import { db } from '../firebase';
 import UserUD from './UserUD';
 import Transactions from './Transactions';
@@ -8,12 +9,12 @@ import styles from './UserDashboard.module.css';
 
 function UserDashboard() {
   const { userId } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<DocumentData | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userDoc = await getDoc(doc(db, 'users', userId));
+      const userDoc = await getDoc(doc(db, 'users', userId!));
       if (userDoc.exists()) {
         setUser(userDoc.data());
       }

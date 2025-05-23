@@ -3,13 +3,14 @@ import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, onSnapshot, where } from "firebase/firestore";
 
 
-function Transactions({ user_id }: any) {
+function Transactions({ user_id, transactionId }: any) {
   const [data, setData] = useState<any[]>([]);
 
     useEffect(() => {
         const q = query(
-          collection(db, "transactions"),
+          collection(db, "participants"),
           where("userid", "==", user_id),
+          where("transactionid", "==", transactionId),
         );  
     
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -58,7 +59,6 @@ function Transactions({ user_id }: any) {
     )
         
 };
-
     
 
 export default Transactions;
