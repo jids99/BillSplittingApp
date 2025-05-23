@@ -44,16 +44,16 @@ const UserUD: React.FC = () => {
   };
 
   const handleSave = async () => {
-      if (!editing) return;
-      try {
-        await updateDoc(doc(db, "users", editing.id), {
-          name: editing.name
-        });
-        setEditing(null);
-      } catch (err) {
-        console.error("Update failed:", err);
-      }
-    };
+    if (!editing) return;
+    try {
+      await updateDoc(doc(db, "users", editing.id), {
+        name: editing.name
+      });
+      setEditing(null);
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
+  };
   
 
   return (

@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp } from "firebase/firestore";
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc } from "firebase/firestore";
 import Modal from 'react-modal';
 import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClose, faTrash, faCheck, faUndo } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 
 Modal.setAppElement('#root');
 
+type Participant = {
+        id: string;
+        transactionid: string;
+        userid: string;
+        amount: number;
+        paidstatus: string;
+        created: Timestamp;
+        fullName: string | null
+    };
 
 function Transactions({ transaction_id }: any) {
-    // const [data, setData] = useState<any[]>([]);
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
     const q = query(
@@ -19,6 +27,38 @@ function Transactions({ transaction_id }: any) {
           where("transactionid", "==", transaction_id),
         );
     const [modalIsOpen, setModalIsOpen] = useState(false);
+   const deleteParticipant = async (id: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this entry?");
+        if (!confirmed) return;
+
+        try {
+            await deleteDoc(doc(db, "participants", id));
+            console.log("Deleted");
+        } catch (error) {
+            console.error("Error deleting:", error);
+        }
+    };
+
+    const markAsPaid = async (id: string) => {
+        try {
+            await updateDoc(doc(db, "participants", id), {
+                paidstatus: 1
+            });
+        } catch (err) {
+            console.error("Update failed:", err);
+        }
+    };
+
+    const undoPayment = async (id: string) => {
+        try {
+            await updateDoc(doc(db, "participants", id), {
+                paidstatus: 0
+            });
+        } catch (err) {
+            console.error("Update failed:", err);
+        }
+    };
+
 
     const getName = async (userId: string): Promise<string | null> => {
         try {
@@ -37,28 +77,24 @@ function Transactions({ transaction_id }: any) {
             return null;
         }
     };
-  
-    type Participant = {
-        id: string;
-        transactionid: string;
-        userid: string;
-        amount: number;
-        created: Timestamp;
-        fullName: string | null
-    };
 
     useEffect(() => {
+        if (!transaction_id) return;
+        console.log(transaction_id);
+
         const unsubscribe = onSnapshot(q, async (snapshot) => {
             const participants: Participant[] = await Promise.all (
                 snapshot.docs.map(async (doc) => {
                     const data = doc.data();
                     const fullName = await getName(data.userid);
+            console.log(data);
 
                 return {
                     id: doc.id,
                     transactionid: data.transactionid,
                     userid: data.userid,
                     amount: data.amount,
+                    paidstatus: data.paidstatus == 1 ? 'Paid' : 'Unpaid',
                     created: data.created,
                     fullName: (fullName ?? null)
                 };
@@ -68,12 +104,11 @@ function Transactions({ transaction_id }: any) {
 
             const total = participants.reduce((sum, p) => sum + p.amount, 0);
             setTotalData(total);
-            console.log('total: ' + total)
         });
     
         return () => unsubscribe();
       }, 
-    []);
+    [transaction_id]);
     
     return (
 
@@ -81,9 +116,10 @@ function Transactions({ transaction_id }: any) {
         <table>
             <thead>
                 <tr>
-                  <th colSpan={4}>
+                  <th colSpan={5}>
                     <div className={styles.thActions}>
                         <h2>Transaction Details</h2>
+                        {/* <p>{transaction_id}</p> */}
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -92,10 +128,11 @@ function Transactions({ transaction_id }: any) {
                 </tr>
                 <tr>
                     <th hidden> Transaction </th>
-                    <th> Paid by </th>
+                    <th> Billed to </th>
                     <th> Amount </th>
                     <th> Status </th>
                     <th> Date </th>
+                    <td></td>
                 </tr>
                 
             </thead>
@@ -105,8 +142,31 @@ function Transactions({ transaction_id }: any) {
                     <td hidden> {item.transactionid} </td>
                     <td> {item.fullName} </td>
                     <td> {item.amount} </td>
-                    <td> </td>
+                    <td> {item.paidstatus} </td>
                     <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td>
+                    <td>
+                        {item.paidstatus == 'Paid' ? (
+                            <button
+                                onClick={() => undoPayment(item.id)}
+                                className="p-2 hover:bg-gray-200 rounded-full"
+                            >
+                                <FontAwesomeIcon icon={faUndo} />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => markAsPaid(item.id)}
+                                className="p-2 hover:bg-gray-200 rounded-full"
+                            >
+                                <FontAwesomeIcon icon={faCheck} />
+                            </button>
+                        )}
+                        <button
+                            onClick={() => deleteParticipant(item.id)}
+                            className="p-2 hover:bg-gray-200 rounded-full"
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    </td>
                 </tr>
                 ))}
                 <tr>
@@ -121,7 +181,7 @@ function Transactions({ transaction_id }: any) {
                 </tr>
             </tbody>
         </table>
-
+                        
 
         <Modal
             isOpen={modalIsOpen}

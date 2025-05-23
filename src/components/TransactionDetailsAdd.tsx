@@ -39,6 +39,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
         userid: selectedUserId,
         transactionid: transaction_id,
         amount: amount,
+        paidstatus: 0,
         created: Timestamp.now()
       });
       setStatus("✅ Puro ka gastos!");
