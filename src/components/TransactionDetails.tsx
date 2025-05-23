@@ -116,7 +116,7 @@ function Transactions({ transaction_id }: any) {
         <table>
             <thead>
                 <tr>
-                  <th colSpan={5}>
+                  <td colSpan={5}>
                     <div className={styles.thActions}>
                         <h2>Magbabayad sayo</h2>
                         {/* <p>{transaction_id}</p> */}
@@ -124,7 +124,8 @@ function Transactions({ transaction_id }: any) {
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
                     </div>
-                  </th>
+                        <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
+                  </td>
                 </tr>
                 <tr>
                     <th hidden> Transaction </th>

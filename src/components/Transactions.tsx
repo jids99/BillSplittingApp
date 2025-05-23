@@ -73,14 +73,15 @@ function Transactions({ user_id }: any) {
           <table>
               <thead>
                   <tr>
-                    <th colSpan={5}>
+                    <td colSpan={5}>
                       <div className={styles.thActions}>
                         <h2>Binayaran mo</h2>
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
                     </div>
-                    </th>
+                        <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
+                    </td>
                   </tr>
                   <tr>
                       <th hidden> ID </th>
@@ -92,8 +93,16 @@ function Transactions({ user_id }: any) {
                   </tr>
               </thead>
               <tbody>
+                <tr>
+                    <td>
+                        <p className='hint' style={{textAlign: 'end'}}> 
+                          2. Tapos click ka isa dito 
+                        </p>
+                      </td>
+                  </tr>
 
                 {data && data.length ? (
+                  
                   data.map(item => (
                   <tr 
                   key={item.id}
@@ -118,8 +127,10 @@ function Transactions({ user_id }: any) {
                             <FontAwesomeIcon icon={faTrash} />
                         </button>
                       </td>
-                  </tr>
+                    </tr>
+                  
                   ))
+                  
                 ) : (
                   <tr><td colSpan={5}>Wala</td></tr>
                 )}
