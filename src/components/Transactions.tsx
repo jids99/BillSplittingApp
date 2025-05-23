@@ -75,7 +75,7 @@ function Transactions({ user_id }: any) {
                   <tr>
                     <th colSpan={5}>
                       <div className={styles.thActions}>
-                        <h2>Transactions</h2>
+                        <h2>Binayaran mo</h2>
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -92,7 +92,9 @@ function Transactions({ user_id }: any) {
                   </tr>
               </thead>
               <tbody>
-                  {data.map(item => (
+
+                {data && data.length ? (
+                  data.map(item => (
                   <tr 
                   key={item.id}
                   onClick={() => handleRowClick(item.id)}
@@ -117,7 +119,11 @@ function Transactions({ user_id }: any) {
                         </button>
                       </td>
                   </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr><td colSpan={5}>Wala</td></tr>
+                )}
+               
                   
               </tbody>
           </table>

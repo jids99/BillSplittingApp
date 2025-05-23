@@ -118,7 +118,7 @@ function Transactions({ transaction_id }: any) {
                 <tr>
                   <th colSpan={5}>
                     <div className={styles.thActions}>
-                        <h2>Transaction Details</h2>
+                        <h2>Magbabayad sayo</h2>
                         {/* <p>{transaction_id}</p> */}
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
@@ -137,7 +137,8 @@ function Transactions({ transaction_id }: any) {
                 
             </thead>
             <tbody>
-                {nameLookUp.map(item => (
+                {nameLookUp && nameLookUp.length ? (
+                nameLookUp.map(item => (
                 <tr key={item.id}>
                     <td hidden> {item.transactionid} </td>
                     <td> {item.fullName} </td>
@@ -168,7 +169,10 @@ function Transactions({ transaction_id }: any) {
                         </button>
                     </td>
                 </tr>
-                ))}
+                ))
+                ) : (
+                  <tr><td colSpan={5}>Wala</td></tr>
+                )}
                 <tr>
                     <td colSpan={4}>
                         <hr />
