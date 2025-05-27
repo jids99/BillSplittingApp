@@ -16,12 +16,31 @@ type Transaction = {
 function Transactions({ user_id }: any) {
   const [data, setData] = useState<any[]>([]);
   const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editing, setEditing] = useState<Transaction | null>(null);
 
   const handleRowClick = (transactionId: string) => {
     setSelectedTransactionId(transactionId);
   };
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+    setIsEditModalOpen(false);
+  };
+
+  const openEditModal = (data: any) => {
+    setIsEditModalOpen(true);
+    setIsAddModalOpen(false); 
+    setEditing(data);
+  };
+
+  const closeModals = () => {
+    setIsAddModalOpen(false);
+    setIsEditModalOpen(false);
+    setEditing(null);
+  };
+
 
   const deleteTransaction = async (id: string) => {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
@@ -54,17 +73,16 @@ function Transactions({ user_id }: any) {
     []);
 
     const handleSave = async () => {
-        if (!editing) return;
-        try {
-          await updateDoc(doc(db, "transactions", editing.id), {
-            amount: editing.amount
-          });
-          setEditing(null);
-        } catch (err) {
-          console.error("Update failed:", err);
-        }
-      };
-      
+      if (!editing) return;
+      try {
+        await updateDoc(doc(db, "transactions", editing.id), {
+          amount: editing.amount
+        });
+        setEditing(null);
+      } catch (err) {
+        console.error("Update failed:", err);
+      }
+    };
     
     return (
 
@@ -73,10 +91,10 @@ function Transactions({ user_id }: any) {
           <table>
               <thead>
                   <tr>
-                    <td colSpan={5}>
+                    <td colSpan={6}>
                       <div className={styles.thActions}>
                         <h2>Binayaran mo</h2>
-                        <button onClick={() => setModalIsOpen(true)}>
+                        <button onClick={openAddModal}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
                     </div>
@@ -86,9 +104,10 @@ function Transactions({ user_id }: any) {
                   <tr>
                       <th hidden> ID </th>
                       <th> Transaction </th>
+                      <th> Date </th>
                       <th> Amount </th>
                       <th> Status </th>
-                      <th> Date </th>
+                      <th> Created </th>
                       <td></td>
                   </tr>
               </thead>
@@ -110,13 +129,14 @@ function Transactions({ user_id }: any) {
                   >
                     <td hidden>{item.id}</td>
                       <td> {item.rowid} </td>
+                      <td> {item.eventDate} </td>
                       <td> {item.amount} </td>
                       <td> {item.paidstatus ? 'Paid' : 'Unpaid'} </td>
                       <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td>
-                      <td>
+                      <td >
                         <button
                           className="bg-blue-500 text-white px-2 py-1 rounded"
-                          onClick={() => setEditing(item)}
+                          onClick={() => openEditModal(item)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
@@ -132,7 +152,7 @@ function Transactions({ user_id }: any) {
                   ))
                   
                 ) : (
-                  <tr><td colSpan={5}>Wala</td></tr>
+                  <tr><td colSpan={6}>Wala</td></tr>
                 )}
                
                   
@@ -146,43 +166,62 @@ function Transactions({ user_id }: any) {
 
         {/* Modal */}
       {editing && (
-        
-        <div className="edit-modal">
-          <div className="edit-container">
-            <h3 className="">Edit </h3>
-            <div className="mb-2">
-              <label className="block">Amount</label>
-              <input
-                type="text"
-                value={editing.amount}
-                onChange={(e) =>
-                  setEditing({ ...editing, amount: Number(e.target.value) })
-                }
-                className="border w-full px-2 py-1 rounded"
-              />
+        <Modal
+            isOpen={isEditModalOpen}
+            onRequestClose={closeModals}
+            style={{
+            overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            content: {
+                backgroundColor: '#242424',
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '20px',
+                borderRadius: '8px',
+            },
+          }} 
+          >
+            <div className='modal-header'>
+              <h2>Edit Transaction </h2>
+              <button onClick={closeModals}>
+                    <FontAwesomeIcon icon={faClose} />
+                </button>
             </div>
-            <div className="btn-container">
-              <button
-                className="bg-gray-300 px-3 py-1 rounded"
-                onClick={() => setEditing(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-green-500 text-white px-3 py-1 rounded"
-                onClick={handleSave}
-              >
-                Save
-              </button>
+            <div className="modal-body">
+              <div className="modal-content">
+                <div className="form-group">
+                  <label className="block" htmlFor="amountInput">Amount</label>
+                  <input
+                    id='amountInput'
+                    type="text"
+                    value={editing.amount}
+                    onChange={(e) =>
+                      setEditing({ ...editing, amount: Number(e.target.value) })
+                    }
+                    className={styles.input}
+                  />
+                </div>
+                <div className="btn-container">
+                  <button
+                    className="bg-green-500 text-white px-3 py-1 rounded"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
         <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={() => setModalIsOpen(false)}
-            contentLabel="Example Modal"
+            isOpen={isAddModalOpen}
+            onRequestClose={closeModals}
             style={{
             overlay: {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -202,7 +241,7 @@ function Transactions({ user_id }: any) {
         >
             <div className='modal-header'>
                 <h2>Add Kalahok</h2>
-                <button onClick={() => setModalIsOpen(false)}>
+                <button onClick={closeModals}>
                     <FontAwesomeIcon icon={faClose} />
                 </button>
             </div>

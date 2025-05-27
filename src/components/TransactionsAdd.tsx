@@ -6,19 +6,25 @@ import styles from "./Transactions.module.css"
 const TransactionsAdd = ({ user_id }: any) => {
   const [status, setStatus] = useState<string>("");
   const [amount, setAmountInput] = useState<number>(0);
+  const [eventDate, setEventDateInput] = useState(() => {
+      const today = new Date();
+      return today.toISOString().split('T')[0];
+    });
 
 
   const handleAdd = async () => {
 
     try {
-      await addDoc(collection(db, "transactions"), {
+      const docRef = await addDoc(collection(db, "transactions"), {
         rowid: `TR${Date.now()}`,
         userid: user_id,
         amount: amount,
+        eventDate: eventDate,
         paidstatus: 0,
         created: Timestamp.now()
       });
-      setStatus("✅ Ayan na nga");
+      console.log('Saved! id: ', docRef.id);
+      // setStatus("✅ Saved!");
       setAmountInput(0);
     } catch (error) {
       console.error("Error saving to Firestore:", error);
@@ -28,29 +34,50 @@ const TransactionsAdd = ({ user_id }: any) => {
 
   return (
     <>
-      <div className="card">
         <div className="modal-content">
             <div className="form-group">
+                <label htmlFor="amountInput">Date</label>
                 <input
+                    id="eventDateInput"
+                    type="text"
+                    value={eventDate}
+                    onChange={(e) => setEventDateInput(e.target.value)}
+                    placeholder="Amount"
+                    className={styles.input}
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="amountInput">Amount</label>
+                <input
+                    id="amountInput"
                     type="text"
                     value={amount}
                     onChange={(e) => setAmountInput(Number(e.target.value))}
                     placeholder="Amount"
-                    className={styles.amountInput}
+                    className={styles.input}
                 />
             </div>
+
+            <div className="modal-footer">
+              <button 
+                  onClick={handleAdd}
+                  className=""
+              >
+                  Next
+              </button>
+
+              <button 
+                  onClick={handleAdd}
+                  className=""
+              >
+                  Finish
+              </button>
+            </div>
             
-            <button 
-                onClick={handleAdd}
-                className=""
-            >
-                Save
-            </button>
         </div>
             
 
           {status && <p>{status}</p>}
-      </div>
       
     </>
   );

@@ -93,6 +93,12 @@ button:focus-visible {
   align-items: center;
 }
 
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -148,9 +154,12 @@ select {
   font-size: var(--fs-xs);
   font-weight: lighter;
   color: burlywood;
+  display: none;
 }
 
 
+
+/* 
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -162,4 +171,4 @@ select {
   button {
     background-color: #f9f9f9;
   }
-}
+} */

@@ -72,7 +72,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
                     value={amount}
                     onChange={(e) => setAmountInput(Number(e.target.value))}
                     placeholder="Amount"
-                    className={styles.amountInput}
+                    className={styles.input}
                 />
             </div>
                 

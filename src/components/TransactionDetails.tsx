@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faCheck, faUndo } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 
-Modal.setAppElement('#root');
 
 type Participant = {
         id: string;
         transactionid: string;
         userid: string;
+        rowid: string | null;
         amount: number;
         paidstatus: string;
         created: Timestamp;
@@ -22,12 +22,14 @@ type Participant = {
 function Transactions({ transaction_id }: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
+    const [readableId, setReadableId] = useState<any>();
     const q = query(
           collection(db, "participants"),
           where("transactionid", "==", transaction_id),
         );
     const [modalIsOpen, setModalIsOpen] = useState(false);
-   const deleteParticipant = async (id: string) => {
+
+    const deleteParticipant = async (id: string) => {
         const confirmed = window.confirm("Are you sure you want to delete this entry?");
         if (!confirmed) return;
 
@@ -59,7 +61,6 @@ function Transactions({ transaction_id }: any) {
         }
     };
 
-
     const getName = async (userId: string): Promise<string | null> => {
         try {
             const userRef = doc(db, "users", userId!);
@@ -78,16 +79,45 @@ function Transactions({ transaction_id }: any) {
         }
     };
 
+    const getTransaction = async (transaction_id: string): Promise<string | null> => {
+        try {
+            const userRef = doc(db, "transactions", transaction_id!);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+            const userData = userSnap.data();
+            return userData.rowid ?? null;
+            } else {
+            console.warn("Transaction not found.");
+            return null;
+            }
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        // Define async function inside useEffect
+        const fetchRowId = async () => {
+        if (!transaction_id) return;
+
+        const result = await getTransaction(transaction_id);
+        setReadableId(result);
+        };
+
+        fetchRowId();
+    }, [transaction_id]); // Runs when transactionId changes
+
     useEffect(() => {
         if (!transaction_id) return;
-        console.log(transaction_id);
 
         const unsubscribe = onSnapshot(q, async (snapshot) => {
             const participants: Participant[] = await Promise.all (
                 snapshot.docs.map(async (doc) => {
                     const data = doc.data();
                     const fullName = await getName(data.userid);
-            console.log(data);
+                    const rowId = await getTransaction(transaction_id);
 
                 return {
                     id: doc.id,
@@ -96,6 +126,7 @@ function Transactions({ transaction_id }: any) {
                     amount: data.amount,
                     paidstatus: data.paidstatus == 1 ? 'Paid' : 'Unpaid',
                     created: data.created,
+                    rowid: (rowId ?? null),
                     fullName: (fullName ?? null)
                 };
             })
@@ -109,16 +140,18 @@ function Transactions({ transaction_id }: any) {
         return () => unsubscribe();
       }, 
     [transaction_id]);
-    
+
+    // console.log('readableid: ',readableId);
+
     return (
 
         <>
         <table>
             <thead>
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={6}>
                     <div className={styles.thActions}>
-                        <h2>Magbabayad sayo</h2>
+                        <h2>Magbabayad sayo | {readableId}</h2>
                         {/* <p>{transaction_id}</p> */}
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
@@ -172,10 +205,10 @@ function Transactions({ transaction_id }: any) {
                 </tr>
                 ))
                 ) : (
-                  <tr><td colSpan={5}>Wala</td></tr>
+                  <tr><td colSpan={6}>Wala</td></tr>
                 )}
                 <tr>
-                    <td colSpan={4}>
+                    <td colSpan={5}>
                         <hr />
                     </td>
                 </tr>
@@ -208,7 +241,6 @@ function Transactions({ transaction_id }: any) {
                 borderRadius: '8px',
             },
             }}
-            
         >
             <div className='modal-header'>
                 <h2>Add Kalahok</h2>

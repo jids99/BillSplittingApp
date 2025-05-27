@@ -1,5 +1,17 @@
+#root {
+    max-width: 100vw;
+}
 .transactionsContainer {
     display: flex;
+    gap: 1.5rem;
+    
+}
+
+.transactionsContainer > table {
+    border: 1px solid white;
+    border-radius: 1rem;
+    padding: 1rem;
+
 }
 
 hr {
@@ -7,12 +19,25 @@ hr {
     opacity: .3;
 }
 
-.amountInput {
+.input {
     width: 170.4px;
 }
+
+button {
+    margin: .15rem;
+}
+
 
 .thActions {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+@media (max-width: 1376px) {
+    .transactionsContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
 }
