@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc, getDocs } from "firebase/firestore";
 import TransactionDetails from './TransactionDetails';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 import TransactionsAdd from './TransactionsAdd';
 import Modal from 'react-modal';
+import MyBills from './MyBills';
 
 type Transaction = {
   id: string;
@@ -46,12 +47,32 @@ function Transactions({ user_id }: any) {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
       if (!confirmed) return;
 
+      const q_delete_participations = query(collection(db, "participants"), where("transactionid", "==", id));
+      const snapshot = await getDocs(q_delete_participations);
+
       try {
           await deleteDoc(doc(db, "transactions", id));
           console.log("Deleted");
       } catch (error) {
           console.error("Error deleting:", error);
       }
+
+      if (snapshot.empty) {
+        console.log("No matching participations.");
+        return;
+      }
+
+      try {
+          for (const document of snapshot.docs) {
+            await deleteDoc(doc(db, "participants", document.id));
+            console.log(`Deleted participation with ID: ${document.id}`);
+          }
+      } catch (error) {
+          console.error("Error deleting:", error);
+      }
+
+      setSelectedTransactionId(null);
+
   };
 
     useEffect(() => {
@@ -87,13 +108,20 @@ function Transactions({ user_id }: any) {
     return (
 
         <>
+
         <div className={styles.transactionsContainer}>
+
+          <MyBills user_id={user_id} />
+
           <table>
               <thead>
                   <tr>
                     <td colSpan={6}>
                       <div className={styles.thActions}>
-                        <h2>Binayaran mo</h2>
+                        <div className='table-title'>
+                          <h2>Transactions</h2>
+                          <p>MGA CNOVER MO</p>
+                        </div>
                         <button onClick={openAddModal}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -107,18 +135,18 @@ function Transactions({ user_id }: any) {
                       <th> Date </th>
                       <th> Amount </th>
                       <th> Status </th>
-                      <th> Created </th>
+                      {/* <th> Created </th> */}
                       <td></td>
                   </tr>
               </thead>
               <tbody>
                 <tr>
-                    <td>
-                        <p className='hint' style={{textAlign: 'end'}}> 
-                          2. Tapos click ka isa dito 
-                        </p>
-                      </td>
-                  </tr>
+                  <td>
+                      <p className='hint' style={{textAlign: 'end'}}> 
+                        2. Tapos click ka isa dito 
+                      </p>
+                    </td>
+                </tr>
 
                 {data && data.length ? (
                   
@@ -130,19 +158,23 @@ function Transactions({ user_id }: any) {
                     <td hidden>{item.id}</td>
                       <td> {item.rowid} </td>
                       <td> {item.eventDate} </td>
-                      <td> {item.amount} </td>
-                      <td> {item.paidstatus ? 'Paid' : 'Unpaid'} </td>
-                      <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td>
+                      <td> ₱ {item.amount} </td>
+                      <td> 
+                        <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                            {item.paidstatus ? 'Paid' : 'Unpaid'}
+                        </div> 
+                      </td>
+                      {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
                       <td >
                         <button
-                          className="bg-blue-500 text-white px-2 py-1 rounded"
+                          className=""
                           onClick={() => openEditModal(item)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
                         <button
                             onClick={() => deleteTransaction(item.id)}
-                            className="p-2 hover:bg-gray-200 rounded-full"
+                            className="danger"
                         >
                             <FontAwesomeIcon icon={faTrash} />
                         </button>
@@ -154,8 +186,8 @@ function Transactions({ user_id }: any) {
                 ) : (
                   <tr><td colSpan={6}>Wala</td></tr>
                 )}
-               
-                  
+                  {/* show all comp */}
+                    <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
               </tbody>
           </table>
 
@@ -164,7 +196,7 @@ function Transactions({ user_id }: any) {
           )}
         </div>
 
-        {/* Modal */}
+      {/* Modal */}
       {editing && (
         <Modal
             isOpen={isEditModalOpen}

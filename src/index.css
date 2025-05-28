@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -19,6 +19,16 @@
     --fs-xl: 1.5rem; /* h1 */
     --fs-xxl: 2rem;
     --fs-xxxl: 3rem;
+
+    --c-success: #065F46;
+    --c-warning: #92400E;
+    --c-danger: #7F1D1D;
+    --c-bruh: #1F2937;
+
+    --c-success-light: rgba(236, 253, 245, 0.25); /* #ECFDF5 */
+    --c-warning-light: rgba(255, 251, 235, 0.25); /* #FFFBEB */
+    --c-danger-light:  rgba(254, 242, 242, 0.25); /* #FEF2F2 */
+    --c-bruh-light:    rgba(249, 250, 251, 0.25); /* #F9FAFB */
 
 }
 
@@ -157,6 +167,47 @@ select {
   display: none;
 }
 
+.badge {
+  padding: .25rem .75rem;
+  border-radius: .5rem;
+  text-align: center;
+  min-width: 4rem;
+}
+
+.table-title {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+
+.table-title p {
+  margin: 0;
+  font-size: var(--fs-xs);
+}
+
+.table-title h2 {
+  margin-bottom: 0;
+}
+
+.success {
+  background-color: var(--c-success);
+  border-color: var(--c-success-light);
+}
+
+.warning {
+  background-color: var(--c-warning);
+  border-color: var(--c-warning-light);
+}
+
+.danger {
+  background-color: var(--c-danger);
+  border-color: var(--c-danger-light);
+}
+
+.bruh {
+  background-color: var(--c-bruh);
+  border-color: var(--c-bruh-light);
+}
 
 
 /* 

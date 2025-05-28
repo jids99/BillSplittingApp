@@ -11,6 +11,7 @@
     border: 1px solid white;
     border-radius: 1rem;
     padding: 1rem;
+    min-width: 550px;
 
 }
 
@@ -27,6 +28,18 @@ button {
     margin: .15rem;
 }
 
+td {
+    font-size: var(--fs-s);
+}
+
+.filterBtn {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem 1rem;
+}
+
 
 .thActions {
     display: flex;
@@ -34,7 +47,12 @@ button {
     align-items: center;
 }
 
-@media (max-width: 1376px) {
+.subtotal {
+    font-size: var(--fs-s);
+    font-weight: 100;
+}
+
+@media (max-width: 1440px) {
     .transactionsContainer {
         display: flex;
         flex-direction: column;

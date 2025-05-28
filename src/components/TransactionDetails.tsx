@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc, getDocs } from "firebase/firestore";
 import Modal from 'react-modal';
 import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,7 +22,15 @@ type Participant = {
 function Transactions({ transaction_id }: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
+
     const [readableId, setReadableId] = useState<any>();
+    const [totalPaid, setTotalPaid] = useState<number>();
+    const [totalUnpaid, setTotalUnpaid] = useState<number>();
+    const [variance, setVariance] = useState<number>();
+    
+    const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
+    const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
+
     const q = query(
           collection(db, "participants"),
           where("transactionid", "==", transaction_id),
@@ -79,35 +87,22 @@ function Transactions({ transaction_id }: any) {
         }
     };
 
-    const getTransaction = async (transaction_id: string): Promise<string | null> => {
+    const getTransaction = async (): Promise<Map<string, any> | null> => {
         try {
-            const userRef = doc(db, "transactions", transaction_id!);
-            const userSnap = await getDoc(userRef);
+            const docRef = doc(db, "transactions", transaction_id); // ✅ points to a document
+            const docSnap = await getDoc(docRef);
 
-            if (userSnap.exists()) {
-            const userData = userSnap.data();
-            return userData.rowid ?? null;
+            if (docSnap.exists()) {
+            return new Map(Object.entries(docSnap.data()));
             } else {
             console.warn("Transaction not found.");
             return null;
             }
         } catch (error) {
-            console.error("Error fetching user:", error);
+            console.error("Error fetching transaction:", error);
             return null;
         }
     };
-
-    useEffect(() => {
-        // Define async function inside useEffect
-        const fetchRowId = async () => {
-        if (!transaction_id) return;
-
-        const result = await getTransaction(transaction_id);
-        setReadableId(result);
-        };
-
-        fetchRowId();
-    }, [transaction_id]); // Runs when transactionId changes
 
     useEffect(() => {
         if (!transaction_id) return;
@@ -117,31 +112,65 @@ function Transactions({ transaction_id }: any) {
                 snapshot.docs.map(async (doc) => {
                     const data = doc.data();
                     const fullName = await getName(data.userid);
-                    const rowId = await getTransaction(transaction_id);
+                    const rowId = await getTransaction();
 
                 return {
                     id: doc.id,
                     transactionid: data.transactionid,
                     userid: data.userid,
                     amount: data.amount,
-                    paidstatus: data.paidstatus == 1 ? 'Paid' : 'Unpaid',
+                    paidstatus: data.paidstatus,
                     created: data.created,
-                    rowid: (rowId ?? null),
+                    rowid: (rowId ?? null)?.get("rowid"),
                     fullName: (fullName ?? null)
                 };
             })
         );
             setData(participants);
 
+            // total paid
+            const totalpaid = participants.reduce((sum, p) => {
+                if(p.paidstatus){
+                    return sum + p.amount
+                } else {
+                    return sum;
+                }
+                }
+            , 0);
+            setTotalPaid(totalpaid); 
+
+            // total by participants
             const total = participants.reduce((sum, p) => sum + p.amount, 0);
-            setTotalData(total);
+            setTotalData(total); 
         });
     
         return () => unsubscribe();
       }, 
     [transaction_id]);
 
-    // console.log('readableid: ',readableId);
+    useEffect(() => {
+        const fetchRowId = async () => {
+        if (!transaction_id) return;
+
+        const result: Map<string, any> | null = await getTransaction();
+        // total by transaction
+        const totalamount = result?.get("amount");
+        const totalpaid = totalPaid ? totalPaid : 0;
+
+        setReadableId((result ?? null)?.get("rowid"));
+        setVariance(totalamount - totalData);
+        setTotalUnpaid(totalamount - totalpaid);
+
+        const totalpaidpercent = totalPaid ? (totalpaid / totalamount) * 100 : 0;
+        const totalaccountedpercent = totalData ? (totalData / totalamount) * 100 : 0;
+
+        setTotalPaidPercent(Math.round(totalpaidpercent));
+        setTotalAccountedPercent(Math.round(totalaccountedpercent));
+
+        };
+
+        fetchRowId();
+    }, [transaction_id, totalData, totalPaid]); 
 
     return (
 
@@ -151,8 +180,10 @@ function Transactions({ transaction_id }: any) {
                 <tr>
                   <td colSpan={6}>
                     <div className={styles.thActions}>
-                        <h2>Magbabayad sayo | {readableId}</h2>
-                        {/* <p>{transaction_id}</p> */}
+                        <div className='table-title'>
+                            <h2>Payers | {readableId}</h2>
+                            <p>MAY UTANG SA IMO</p>
+                        </div>
                         <button onClick={() => setModalIsOpen(true)}>
                         <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -165,8 +196,14 @@ function Transactions({ transaction_id }: any) {
                     <th> Billed to </th>
                     <th> Amount </th>
                     <th> Status </th>
-                    <th> Date </th>
+                    {/* <th> Created </th> */}
                     <td></td>
+                </tr>
+                
+                <tr>
+                    <td colSpan={5}>
+                        <hr />
+                    </td>
                 </tr>
                 
             </thead>
@@ -176,28 +213,32 @@ function Transactions({ transaction_id }: any) {
                 <tr key={item.id}>
                     <td hidden> {item.transactionid} </td>
                     <td> {item.fullName} </td>
-                    <td> {item.amount} </td>
-                    <td> {item.paidstatus} </td>
-                    <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td>
+                    <td> ₱ {item.amount} </td>
+                    <td> 
+                        <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                            {item.paidstatus ? 'Paid' : 'Unpaid'}
+                        </div> 
+                    </td>
+                    {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
                     <td>
-                        {item.paidstatus == 'Paid' ? (
+                        {item.paidstatus ? (
                             <button
                                 onClick={() => undoPayment(item.id)}
-                                className="p-2 hover:bg-gray-200 rounded-full"
+                                className="bruh"
                             >
                                 <FontAwesomeIcon icon={faUndo} />
                             </button>
                         ) : (
                             <button
                                 onClick={() => markAsPaid(item.id)}
-                                className="p-2 hover:bg-gray-200 rounded-full"
+                                className="success"
                             >
                                 <FontAwesomeIcon icon={faCheck} />
                             </button>
                         )}
                         <button
                             onClick={() => deleteParticipant(item.id)}
-                            className="p-2 hover:bg-gray-200 rounded-full"
+                            className="danger"
                         >
                             <FontAwesomeIcon icon={faTrash} />
                         </button>
@@ -213,10 +254,33 @@ function Transactions({ transaction_id }: any) {
                     </td>
                 </tr>
                 <tr>
-                    <th>Total</th>
-                    <th>{totalData}</th>
+                    <th>Total (Accounted)</th>
+                    <th>{totalData}  ({totalAccountedPercent}%)</th>
                     <td colSpan={2}></td>
                 </tr>
+                {variance ? (
+                    <tr className={styles.subtotal}>
+                        <td>Unaccounted</td>
+                        <td>{variance}</td>
+                    </tr>
+                ) : null}
+
+                <tr>
+                    <td colSpan={5}>
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Paid</th>
+                    <th>{totalPaid} ({totalPaidPercent}%)</th>
+                </tr>
+                {totalUnpaid ? (
+                    <tr className={styles.subtotal}>
+                        <td>Unpaid</td>
+                        <td>{totalUnpaid}</td>
+                    </tr>
+                ) : null}
+                
             </tbody>
         </table>
                         
