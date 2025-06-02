@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc, getDocs, orderBy, limit } from "firebase/firestore";
+import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc, getDocs} from "firebase/firestore";
 import TransactionDetails from './TransactionDetails';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
@@ -111,7 +111,6 @@ function Transactions({ user_id }: any) {
 
      const handleAddedTransaction = (id: any) => {
       setSelectedTransactionId(id);
-      console.log('New document ID received in parent:', id);
     };
     
     return (
