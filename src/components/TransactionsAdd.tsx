@@ -2,15 +2,22 @@ import { useState } from "react";
 import { db } from "../firebase"; // Adjust path as needed
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import styles from "./Transactions.module.css"
+import TransactionDetailsAdd from "./TransactionDetailsAdd";
 
-const TransactionsAdd = ({ user_id }: any) => {
+const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
   const [status, setStatus] = useState<string>("");
+  const [generatedId, setGeneratedId] = useState<string>("");
   const [amount, setAmountInput] = useState<number>(0);
+
   const [eventDate, setEventDateInput] = useState(() => {
       const today = new Date();
       return today.toISOString().split('T')[0];
     });
 
+  const [modalStep, setModalStep] = useState(1); // Track current content step
+  
+  const handleNext = () => setModalStep(2);
+  // const handleBack = () => setModalStep(1);
 
   const handleAdd = async () => {
 
@@ -23,17 +30,24 @@ const TransactionsAdd = ({ user_id }: any) => {
         paidstatus: 0,
         created: Timestamp.now()
       });
+
+      setGeneratedId(docRef.id);
+      onAddSuccess(docRef.id);
+      
       console.log('Saved! id: ', docRef.id);
       // setStatus("✅ Saved!");
       setAmountInput(0);
+      handleNext();
     } catch (error) {
       console.error("Error saving to Firestore:", error);
       setStatus("❌ Mali");
     }
   };
 
+
   return (
     <>
+    {modalStep === 1 && (
         <div className="modal-content">
             <div className="form-group">
                 <label htmlFor="amountInput">Date</label>
@@ -65,19 +79,16 @@ const TransactionsAdd = ({ user_id }: any) => {
               >
                   Next
               </button>
-
-              <button 
-                  onClick={handleAdd}
-                  className=""
-              >
-                  Finish
-              </button>
+              
             </div>
             
-        </div>
-            
-
           {status && <p>{status}</p>}
+        </div>
+    )}
+
+    {modalStep === 2 && (
+      <TransactionDetailsAdd transaction_id={generatedId}/>
+    )}
       
     </>
   );

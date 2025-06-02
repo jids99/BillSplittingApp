@@ -89,7 +89,7 @@ function Transactions({ transaction_id }: any) {
 
     const getTransaction = async (): Promise<Map<string, any> | null> => {
         try {
-            const docRef = doc(db, "transactions", transaction_id); // ✅ points to a document
+            const docRef = doc(db, "transactions", transaction_id); 
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {

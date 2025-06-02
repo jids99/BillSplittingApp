@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc, getDocs } from "firebase/firestore";
+import { collection, query, onSnapshot, where, deleteDoc, doc, updateDoc, getDocs, orderBy, limit } from "firebase/firestore";
 import TransactionDetails from './TransactionDetails';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
@@ -42,7 +42,6 @@ function Transactions({ user_id }: any) {
     setEditing(null);
   };
 
-
   const deleteTransaction = async (id: string) => {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
       if (!confirmed) return;
@@ -53,6 +52,7 @@ function Transactions({ user_id }: any) {
       try {
           await deleteDoc(doc(db, "transactions", id));
           console.log("Deleted");
+          setSelectedTransactionId(null);
       } catch (error) {
           console.error("Error deleting:", error);
       }
@@ -86,12 +86,16 @@ function Transactions({ user_id }: any) {
             id: doc.id,
             ...doc.data(),
           }));
+          const doc = snapshot.docs[0];
+          setSelectedTransactionId(doc.id);
           setData(items);
         });
     
         return () => unsubscribe();
       }, 
     []);
+
+    console.log("selectedTransactionId: ", selectedTransactionId);
 
     const handleSave = async () => {
       if (!editing) return;
@@ -103,6 +107,11 @@ function Transactions({ user_id }: any) {
       } catch (err) {
         console.error("Update failed:", err);
       }
+    };
+
+     const handleAddedTransaction = (id: any) => {
+      setSelectedTransactionId(id);
+      console.log('New document ID received in parent:', id);
     };
     
     return (
@@ -186,13 +195,18 @@ function Transactions({ user_id }: any) {
                 ) : (
                   <tr><td colSpan={6}>Wala</td></tr>
                 )}
-                  {/* show all comp */}
-                    <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
+                 
               </tbody>
+              <tfoot>
+                <tr>
+                  {/* show all comp */}
+                  <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
+                </tr>
+              </tfoot>
           </table>
 
           {selectedTransactionId && (
-            <TransactionDetails user={user_id} transaction_id={selectedTransactionId} />
+            <TransactionDetails user={user_id} transaction_id={selectedTransactionId}/>
           )}
         </div>
 
@@ -272,13 +286,13 @@ function Transactions({ user_id }: any) {
             }}
         >
             <div className='modal-header'>
-                <h2>Add Kalahok</h2>
+                <h2>Add Budol</h2>
                 <button onClick={closeModals}>
                     <FontAwesomeIcon icon={faClose} />
                 </button>
             </div>
             <div className='modal-body'>
-                <TransactionsAdd user_id={user_id} />
+                <TransactionsAdd user_id={user_id} onAddSuccess={handleAddedTransaction} />
             </div>
         </Modal>
             
