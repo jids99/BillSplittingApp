@@ -95,8 +95,6 @@ function Transactions({ user_id }: any) {
       }, 
     []);
 
-    console.log("selectedTransactionId: ", selectedTransactionId);
-
     const handleSave = async () => {
       if (!editing) return;
       try {

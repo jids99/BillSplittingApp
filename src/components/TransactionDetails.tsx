@@ -4,8 +4,9 @@ import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc
 import Modal from 'react-modal';
 import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faClose, faTrash, faCheck, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
+import BillSplit from './BillSplit';
 
 
 type Participant = {
@@ -31,11 +32,29 @@ function Transactions({ transaction_id }: any) {
     const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
     const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
 
+    const [addKalahokModalIsOpen, setAddKalahokModalIsOpen] = useState(false);
+    const [splitevenModalIsOpen, setSplitevenModalIsOpen] = useState(false);
+    
+      const openAddModal = () => {
+       setSplitevenModalIsOpen(false);
+        setAddKalahokModalIsOpen(true);
+      };
+    
+      const openSplitModal = () => {
+        setSplitevenModalIsOpen(true);
+        setAddKalahokModalIsOpen(false);
+      };
+    
+      const closeModals = () => {
+        setSplitevenModalIsOpen(false);
+        setAddKalahokModalIsOpen(false);
+      };
+
     const q = query(
           collection(db, "participants"),
           where("transactionid", "==", transaction_id),
         );
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    // const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const deleteParticipant = async (id: string) => {
         const confirmed = window.confirm("Are you sure you want to delete this entry?");
@@ -184,9 +203,20 @@ function Transactions({ transaction_id }: any) {
                             <h2>Payers | {readableId}</h2>
                             <p>MAY UTANG SA IMO</p>
                         </div>
-                        <button onClick={() => setModalIsOpen(true)}>
-                        <FontAwesomeIcon icon={faPlus} />
-                        </button>
+                        <div style={{display: 'flex'}}>
+                            <button 
+                            className={styles.iconBtn}
+                            onClick={openSplitModal}
+                            >
+                                <FontAwesomeIcon icon={faMoneyBill} />
+                                Split Even
+                            </button>
+                            {/* {!modalIsOpen && ( */}
+                                <button onClick={openAddModal}>
+                                <FontAwesomeIcon icon={faPlus} />
+                                </button>
+                            {/* )} */}
+                        </div>
                     </div>
                         <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
                   </td>
@@ -286,9 +316,8 @@ function Transactions({ transaction_id }: any) {
                         
 
         <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={() => setModalIsOpen(false)}
-            contentLabel="Example Modal"
+            isOpen={addKalahokModalIsOpen}
+            onRequestClose={closeModals}
             style={{
             overlay: {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -308,12 +337,43 @@ function Transactions({ transaction_id }: any) {
         >
             <div className='modal-header'>
                 <h2>Add Kalahok</h2>
-                <button onClick={() => setModalIsOpen(false)}>
+                <button onClick={closeModals}>
                     <FontAwesomeIcon icon={faClose} />
                 </button>
             </div>
             <div className='modal-body'>
                 <TransactionDetailsAdd transaction_id={transaction_id} />
+            </div>
+        </Modal>
+
+        <Modal
+            isOpen={splitevenModalIsOpen}
+            onRequestClose={closeModals}
+            style={{
+            overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            content: {
+                backgroundColor: '#242424',
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '20px',
+                borderRadius: '8px',
+            },
+            }}
+        >
+            <div className='modal-header'>
+                <h2>Split Even</h2>
+                <button onClick={closeModals}>
+                    <FontAwesomeIcon icon={faClose} />
+                </button>
+            </div>
+            <div className='modal-body'>
+                <BillSplit transaction_id={transaction_id} />
             </div>
         </Modal>
             

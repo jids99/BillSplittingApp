@@ -92,8 +92,6 @@ function MyBills({ user_id }: any) {
 
                     const billerid = (transaction ?? null)?.get("userid");
                     const billerName = await getName(billerid);
-                    console.log(billerid);
-                    console.log(billerName);
 
                 return {
                     id: doc.id,
@@ -129,7 +127,7 @@ function MyBills({ user_id }: any) {
                             <h2>My Bills</h2>
                             <p>MGA BAYARIN MO</p>
                         </div>
-                        <button className={styles.filterBtn}>
+                        <button className={styles.iconBtn}>
                             <FontAwesomeIcon icon={faSliders} /> 
                             Filter
                         </button>

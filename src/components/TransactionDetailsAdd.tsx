@@ -49,42 +49,48 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
 
   return (
     <>
+      <div style={{display: 'flex'}}>
 
-      <div className="card">
-        <div className="modal-content">
-            <div className="form-group">
-                <label htmlFor="userSelect">User:</label>
-                <select id="userSelect" value={selectedUserId} onChange={handleChange}>
-                    <option value="">-- Choose a user --</option>
-                    {users.map(user => (
-                    <option key={user.id} value={user.id}>
-                        {user.name}
-                    </option>
-                    ))}
-                </select>
-            </div>
+        <TransactionDetails transaction_id={transaction_id} />
 
-            <div className="form-group">
-                <input
-                    type="text"
-                    value={amount}
-                    onChange={(e) => setAmountInput(Number(e.target.value))}
-                    placeholder="Amount"
-                    className={styles.input}
-                />
-            </div>
+        <div className="card">
+          <div className="modal-content">
+              <div className="form-group">
+                  <label htmlFor="userSelect">User:</label>
+                  <select id="userSelect" value={selectedUserId} onChange={handleChange}>
+                      <option value="">-- Choose a user --</option>
+                      {users.map(user => (
+                      <option key={user.id} value={user.id}>
+                          {user.name}
+                      </option>
+                      ))}
+                  </select>
+              </div>
 
-            <button 
-                onClick={handleAdd}
-                className=""
-            >
-                Save
-            </button>
+              <div className="form-group">
+                  <label htmlFor="amountInput">Amount:</label>
+                  <input
+                      id="amountInput"
+                      type="text"
+                      value={amount}
+                      onChange={(e) => setAmountInput(Number(e.target.value))}
+                      placeholder="Amount"
+                      className={styles.input}
+                  />
+              </div>
+
+              <button 
+                  onClick={handleAdd}
+                  className=""
+              >
+                  Save
+              </button>
+          </div>
+
+            {status && <p>{status}</p>}
         </div>
-
-          {status && <p>{status}</p>}
+        
       </div>
-      
     </>
   );
 };
