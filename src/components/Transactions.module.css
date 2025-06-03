@@ -52,9 +52,17 @@ td {
     font-weight: 100;
 }
 
+.twoColumnContainer {
+    display: flex;
+}
+
 @media (max-width: 1440px) {
     .transactionsContainer {
         display: flex;
+        flex-direction: column;
+    }
+
+    .twoColumnContainer {
         flex-direction: column;
     }
 

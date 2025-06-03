@@ -49,7 +49,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
 
   return (
     <>
-      <div style={{display: 'flex'}}>
+      <div className={styles.twoColumnContainer}>
 
         <TransactionDetails transaction_id={transaction_id} />
 

@@ -44,7 +44,6 @@ const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
     }
   };
 
-
   return (
     <>
     {modalStep === 1 && (

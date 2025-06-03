@@ -203,7 +203,7 @@ function Transactions({ user_id }: any) {
           </table>
 
           {selectedTransactionId && (
-            <TransactionDetails user={user_id} transaction_id={selectedTransactionId}/>
+            <TransactionDetails user={user_id} transaction_id={selectedTransactionId} isCalledOnModal={false}/>
           )}
         </div>
 
@@ -289,7 +289,7 @@ function Transactions({ user_id }: any) {
                 </button>
             </div>
             <div className='modal-body'>
-                <TransactionsAdd user_id={user_id} onAddSuccess={handleAddedTransaction} />
+                <TransactionsAdd user_id={user_id} onAddSuccess={handleAddedTransaction}/>
             </div>
         </Modal>
             

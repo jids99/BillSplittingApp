@@ -1,16 +1,179 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, updateDoc} from "firebase/firestore";
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc} from "firebase/firestore";
+import Modal from 'react-modal';
+import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faUndo, faSliders} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 
+type Participant = {
+        id: string;
+        transactionid: string;
+        userid: string;
+        rowid: string | null;
+        amount: number;
+        paidstatus: string;
+        created: Timestamp;
+        fullName: string | null
+    };
+
+
 function BillSplit({ transaction_id }: any) {
+
+  const [nameLookUp, setData] = useState<Participant[]>([]);
+  const [totalData, setTotalData] = useState<any>();
+
+  const [readableId, setReadableId] = useState<any>();
+  const [transactionAmount, setTransactionAmount] = useState<any>();
+  const [totalPaid, setTotalPaid] = useState<number>();
+  const [totalUnpaid, setTotalUnpaid] = useState<number>();
+  const [variance, setVariance] = useState<number>();
+  
+  const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
+  const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
+
+  const [totalPerSplitter, setTotalPerSplitter] = useState<number>();
+
+  const getName = async (userId: string): Promise<string | null> => {
+          try {
+              const userRef = doc(db, "users", userId!);
+              const userSnap = await getDoc(userRef);
+  
+              if (userSnap.exists()) {
+              const userData = userSnap.data();
+              return userData.name ?? null;
+              } else {
+              console.warn("Name not found.");
+              return null;
+              }
+          } catch (error) {
+              console.error("Error fetching user:", error);
+              return null;
+          }
+      };
+  
+      const getTransaction = async (): Promise<Map<string, any> | null> => {
+          try {
+              const docRef = doc(db, "transactions", transaction_id); 
+              const docSnap = await getDoc(docRef);
+  
+              if (docSnap.exists()) {
+              return new Map(Object.entries(docSnap.data()));
+              } else {
+              console.warn("Transaction not found.");
+              return null;
+              }
+          } catch (error) {
+              console.error("Error fetching transaction:", error);
+              return null;
+          }
+      };
+
+      const q = query(
+          collection(db, "participants"),
+          where("transactionid", "==", transaction_id),
+        );
+  
+      useEffect(() => {
+          if (!transaction_id) return;
+  
+          const unsubscribe = onSnapshot(q, async (snapshot) => {
+              const participants: Participant[] = await Promise.all (
+                  snapshot.docs.map(async (doc) => {
+                      const data = doc.data();
+                      const fullName = await getName(data.userid);
+                      const rowId = await getTransaction();
+  
+                  return {
+                      id: doc.id,
+                      transactionid: data.transactionid,
+                      userid: data.userid,
+                      amount: data.amount,
+                      paidstatus: data.paidstatus,
+                      created: data.created,
+                      rowid: (rowId ?? null)?.get("rowid"),
+                      fullName: (fullName ?? null)
+                  };
+              })
+          );
+              setData(participants);
+  
+              // total paid
+              const totalpaid = participants.reduce((sum, p) => {
+                  if(p.paidstatus){
+                      return sum + p.amount
+                  } else {
+                      return sum;
+                  }
+                  }
+              , 0);
+              setTotalPaid(totalpaid); 
+  
+              // total by participants
+              const total = participants.reduce((sum, p) => sum + p.amount, 0);
+              setTotalData(total); 
+          });
+      
+          return () => unsubscribe();
+        }, 
+      [transaction_id]);
+  
+      useMemo(() => {
+          const fetchRowId = async () => {
+          if (!transaction_id) return;
+  
+          const result: Map<string, any> | null = await getTransaction();
+          // total by transaction
+          const totalamount = result?.get("amount");
+          const totalpaid = totalPaid ? totalPaid : 0;
+
+          setTransactionAmount(totalamount);
+
+          setReadableId((result ?? null)?.get("rowid"));
+          setVariance(totalamount - totalData);
+          setTotalUnpaid(totalamount - totalpaid);
+  
+          const totalpaidpercent = totalPaid ? (totalpaid / totalamount) * 100 : 0;
+          const totalaccountedpercent = totalData ? (totalData / totalamount) * 100 : 0;
+  
+          setTotalPaidPercent(Math.round(totalpaidpercent));
+          setTotalAccountedPercent(Math.round(totalaccountedpercent));
+
+          // change totalSplitters per condition
+          const totalSplitters = result?.size ?? 1;
+
+          // change transaction amount per condition
+          const totalEach = transactionAmount / totalSplitters;
+
+          setTotalPerSplitter(totalEach)
+  
+          };
+  
+          fetchRowId();
+      }, [transaction_id, totalData, totalPaid]); 
   
     return (
 
         <>
-          <p>{transaction_id}</p> 
+          <p>{readableId}</p> 
+          <p>Total Amount: {transactionAmount} </p> 
+          <p>Total Accounted: {totalData} ({totalAccountedPercent}%)</p> 
+          <p>Total Unaccounted: {variance}</p> 
+          <p>Total Paid: {totalPaid} ({totalPaidPercent}%)</p>
+
+          <hr></hr>
+
+          <p>{totalPerSplitter}</p>
+
+          {nameLookUp && nameLookUp.length ? (
+                nameLookUp.map(item => (
+                <p>{item.fullName} {item.paidstatus ? 'Paid' : 'Unpaid'}</p>
+                ))
+                ) : (
+                  <p>Wala</p>
+                )}
+
         </>
     )
         

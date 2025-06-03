@@ -8,7 +8,6 @@ import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawe
 import styles from './Transactions.module.css';
 import BillSplit from './BillSplit';
 
-
 type Participant = {
         id: string;
         transactionid: string;
@@ -20,7 +19,7 @@ type Participant = {
         fullName: string | null
     };
 
-function Transactions({ transaction_id }: any) {
+function TransactionDetails({ transaction_id, isCalledOnModal = false }: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
 
@@ -34,27 +33,26 @@ function Transactions({ transaction_id }: any) {
 
     const [addKalahokModalIsOpen, setAddKalahokModalIsOpen] = useState(false);
     const [splitevenModalIsOpen, setSplitevenModalIsOpen] = useState(false);
-    
-      const openAddModal = () => {
-       setSplitevenModalIsOpen(false);
+
+    const openAddModal = () => {
+        setSplitevenModalIsOpen(false);
         setAddKalahokModalIsOpen(true);
-      };
-    
-      const openSplitModal = () => {
+    };
+
+    const openSplitModal = () => {
         setSplitevenModalIsOpen(true);
         setAddKalahokModalIsOpen(false);
-      };
-    
-      const closeModals = () => {
+    };
+
+    const closeModals = () => {
         setSplitevenModalIsOpen(false);
         setAddKalahokModalIsOpen(false);
-      };
+    };
 
     const q = query(
           collection(db, "participants"),
           where("transactionid", "==", transaction_id),
         );
-    // const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const deleteParticipant = async (id: string) => {
         const confirmed = window.confirm("Are you sure you want to delete this entry?");
@@ -211,11 +209,9 @@ function Transactions({ transaction_id }: any) {
                                 <FontAwesomeIcon icon={faMoneyBill} />
                                 Split Even
                             </button>
-                            {/* {!modalIsOpen && ( */}
-                                <button onClick={openAddModal}>
+                            <button onClick={openAddModal}>
                                 <FontAwesomeIcon icon={faPlus} />
-                                </button>
-                            {/* )} */}
+                            </button>
                         </div>
                     </div>
                         <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
@@ -314,7 +310,6 @@ function Transactions({ transaction_id }: any) {
             </tbody>
         </table>
                         
-
         <Modal
             isOpen={addKalahokModalIsOpen}
             onRequestClose={closeModals}
@@ -332,6 +327,7 @@ function Transactions({ transaction_id }: any) {
                 transform: 'translate(-50%, -50%)',
                 padding: '20px',
                 borderRadius: '8px',
+                overflowY: 'auto',
             },
             }}
         >
@@ -367,7 +363,10 @@ function Transactions({ transaction_id }: any) {
             }}
         >
             <div className='modal-header'>
-                <h2>Split Even</h2>
+                <div className='modal-title'>
+                    <h2>Split Even</h2>
+                    <p>{readableId}</p>
+                </div>
                 <button onClick={closeModals}>
                     <FontAwesomeIcon icon={faClose} />
                 </button>
@@ -383,4 +382,4 @@ function Transactions({ transaction_id }: any) {
 };
     
 
-export default Transactions;
+export default TransactionDetails;
