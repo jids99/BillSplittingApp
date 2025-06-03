@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc} from "firebase/firestore";
 import Modal from 'react-modal';
@@ -148,7 +148,7 @@ function Transactions({ transaction_id }: any) {
       }, 
     [transaction_id]);
 
-    useEffect(() => {
+    useMemo(() => {
         const fetchRowId = async () => {
         if (!transaction_id) return;
 

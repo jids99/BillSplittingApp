@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebase"; // Adjust path as needed
 import { collection, addDoc, Timestamp, getDocs } from "firebase/firestore";
 import styles from "./Transactions.module.css"
+import TransactionDetails from "./TransactionDetails";
 
 const TransactionDetailsAdd = ({ transaction_id }: any) => {
   const [status, setStatus] = useState<string>("");
   const [amount, setAmountInput] = useState<number>(0);
-
-  
 
   const [users, setUsers] = useState<{ id: string; name: string }[]>([]);
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -32,10 +31,6 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
 
   const handleAdd = async () => {
 
-    console.log("User ID:", selectedUserId);
-    console.log("Transaction ID:", transaction_id);
-    console.log("Amount:", amount);
-
     try {
       await addDoc(collection(db, "participants"), {
         userid: selectedUserId,
@@ -54,6 +49,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
 
   return (
     <>
+
       <div className="card">
         <div className="modal-content">
             <div className="form-group">
@@ -77,8 +73,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
                     className={styles.input}
                 />
             </div>
-                
-            
+
             <button 
                 onClick={handleAdd}
                 className=""
@@ -86,7 +81,6 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
                 Save
             </button>
         </div>
-            
 
           {status && <p>{status}</p>}
       </div>
