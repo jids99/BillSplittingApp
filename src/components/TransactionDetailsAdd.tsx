@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebase"; // Adjust path as needed
 import { collection, addDoc, Timestamp, getDocs } from "firebase/firestore";
 import styles from "./Transactions.module.css"
-import TransactionDetails from "./TransactionDetails";
+import TransactionDetailsModal from "./TransactionDetailsModal";
 
 const TransactionDetailsAdd = ({ transaction_id }: any) => {
   const [status, setStatus] = useState<string>("");
@@ -51,7 +51,7 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
     <>
       <div className={styles.twoColumnContainer}>
 
-        <TransactionDetails transaction_id={transaction_id} />
+        <TransactionDetailsModal transaction_id={transaction_id} />
 
         <div className="card">
           <div className="modal-content">

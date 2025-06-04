@@ -12,6 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+    --fs-xxs: 0.5rem; /* mobile data */
     --fs-xs: 0.75rem; /* data */
     --fs-s: 0.875rem; /* btn, sidebar items*/
     --fs-m: 1rem; /* h3 */
@@ -207,6 +208,36 @@ select {
 .bruh {
   background-color: var(--c-bruh);
   border-color: var(--c-bruh-light);
+}
+
+.modalTable th, td {
+  padding: .25rem .5rem;
+}
+
+.modalTable th {
+  font-size: var(--fs-xs);
+}
+
+.modalTable td {
+  font-size: var(--fs-xs);
+}
+
+.modalTable button {
+  scale: .8;
+}
+
+.modalTable .badge {
+  scale: .8;
+}
+
+.modalTable hr {
+  padding: 0;
+}
+
+@media (max-width: 1440px) {
+    
+    
+
 }
 
 

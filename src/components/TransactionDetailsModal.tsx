@@ -19,7 +19,7 @@ type Participant = {
         fullName: string | null
     };
 
-function TransactionDetails({ transaction_id }: any) {
+function TransactionDetailsModal({ transaction_id}: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
 
@@ -30,24 +30,6 @@ function TransactionDetails({ transaction_id }: any) {
     
     const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
     const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
-
-    const [addKalahokModalIsOpen, setAddKalahokModalIsOpen] = useState(false);
-    const [splitevenModalIsOpen, setSplitevenModalIsOpen] = useState(false);
-
-    const openAddModal = () => {
-        setSplitevenModalIsOpen(false);
-        setAddKalahokModalIsOpen(true);
-    };
-
-    const openSplitModal = () => {
-        setSplitevenModalIsOpen(true);
-        setAddKalahokModalIsOpen(false);
-    };
-
-    const closeModals = () => {
-        setSplitevenModalIsOpen(false);
-        setAddKalahokModalIsOpen(false);
-    };
 
     const q = query(
           collection(db, "participants"),
@@ -192,25 +174,20 @@ function TransactionDetails({ transaction_id }: any) {
     return (
 
         <>
-        <table>
+        <table className='modalTable'>
             <thead>
                 <tr>
                   <td colSpan={6}>
                     <div className={styles.thActions}>
                         <div className='table-title'>
-                            <h2>Payers | {readableId}</h2>
-                            <p>MAY UTANG SA IMO</p>
+                            <h3>Payers | {readableId}</h3>
                         </div>
                         <div style={{display: 'flex'}}>
                             <button 
                             className={styles.iconBtn}
-                            onClick={openSplitModal}
                             >
                                 <FontAwesomeIcon icon={faMoneyBill} />
                                 Split Even
-                            </button>
-                            <button onClick={openAddModal}>
-                                <FontAwesomeIcon icon={faPlus} />
                             </button>
                         </div>
                     </div>
@@ -226,11 +203,7 @@ function TransactionDetails({ transaction_id }: any) {
                     <td></td>
                 </tr>
                 
-                <tr>
-                    <td colSpan={5}>
-                        <hr />
-                    </td>
-                </tr>
+              
                 
             </thead>
             <tbody>
@@ -310,75 +283,6 @@ function TransactionDetails({ transaction_id }: any) {
             </tbody>
         </table>
                         
-        <Modal
-            isOpen={addKalahokModalIsOpen}
-            onRequestClose={closeModals}
-            style={{
-            overlay: {
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            },
-            content: {
-                backgroundColor: '#242424',
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                padding: '20px',
-                borderRadius: '8px',
-                overflowY: 'auto',
-                maxHeight: '80vh'
-            },
-            }}
-        >
-            <div className='modal-Container'>
-                <div className='modal-header'>
-                    <h2>Add Kalahok</h2>
-                    <button onClick={closeModals}>
-                        <FontAwesomeIcon icon={faClose} />
-                    </button>
-                </div>
-                <div className='modal-body'>
-                    <TransactionDetailsAdd transaction_id={transaction_id} />
-                </div>
-
-            </div>
-        </Modal>
-
-        <Modal
-            isOpen={splitevenModalIsOpen}
-            onRequestClose={closeModals}
-            style={{
-            overlay: {
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            },
-            content: {
-                backgroundColor: '#242424',
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                padding: '20px',
-                borderRadius: '8px',
-            },
-            }}
-        >
-            <div className='modal-header'>
-                <div className='modal-title'>
-                    <h2>Split Even</h2>
-                    <p>{readableId}</p>
-                </div>
-                <button onClick={closeModals}>
-                    <FontAwesomeIcon icon={faClose} />
-                </button>
-            </div>
-            <div className='modal-body'>
-                <BillSplit transaction_id={transaction_id} />
-            </div>
-        </Modal>
             
         </>
     )
@@ -386,4 +290,4 @@ function TransactionDetails({ transaction_id }: any) {
 };
     
 
-export default TransactionDetails;
+export default TransactionDetailsModal;
