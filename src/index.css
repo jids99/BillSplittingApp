@@ -234,6 +234,21 @@ select {
   padding: 0;
 }
 
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+
+.modal-title p {
+  margin: 0;
+  font-size: var(--fs-xs);
+}
+
+.modal-title h2 {
+  margin: 0;
+}
+
 @media (max-width: 1440px) {
     
     

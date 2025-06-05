@@ -33,7 +33,7 @@ function BillSplit({ transaction_id }: any) {
   const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
   const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
 
-  const [totalPerSplitter, setTotalPerSplitter] = useState<number>();
+  const [totalPerSplitter, setTotalPerSplitter] = useState<number>(0);
 
   const getName = async (userId: string): Promise<string | null> => {
           try {
@@ -124,6 +124,7 @@ function BillSplit({ transaction_id }: any) {
           if (!transaction_id) return;
   
           const result: Map<string, any> | null = await getTransaction();
+          const kalahoks = nameLookUp;
           // total by transaction
           const totalamount = result?.get("amount");
           const totalpaid = totalPaid ? totalPaid : 0;
@@ -131,8 +132,8 @@ function BillSplit({ transaction_id }: any) {
           setTransactionAmount(totalamount);
 
           setReadableId((result ?? null)?.get("rowid"));
-          setVariance(totalamount - totalData);
-          setTotalUnpaid(totalamount - totalpaid);
+          setVariance(transactionAmount - totalData);
+          setTotalUnpaid(transactionAmount - totalpaid);
   
           const totalpaidpercent = totalPaid ? (totalpaid / totalamount) * 100 : 0;
           const totalaccountedpercent = totalData ? (totalData / totalamount) * 100 : 0;
@@ -141,38 +142,70 @@ function BillSplit({ transaction_id }: any) {
           setTotalAccountedPercent(Math.round(totalaccountedpercent));
 
           // change totalSplitters per condition
-          const totalSplitters = result?.size ?? 1;
+          const totalSplitters = kalahoks.filter(item => Number(item.paidstatus) === 0).length;
 
-          // change transaction amount per condition
-          const totalEach = transactionAmount / totalSplitters;
+          // change transactionAmount per condition
+          const totalEach = (transactionAmount - totalpaid) / totalSplitters;
 
-          setTotalPerSplitter(totalEach)
+          setTotalPerSplitter(Math.round(totalEach));
   
           };
   
           fetchRowId();
       }, [transaction_id, totalData, totalPaid]); 
-  
+
     return (
 
         <>
-          <p>{readableId}</p> 
           <p>Total Amount: {transactionAmount} </p> 
           <p>Total Accounted: {totalData} ({totalAccountedPercent}%)</p> 
-          <p>Total Unaccounted: {variance}</p> 
+          {(variance ?? 0) > 0 ? (
+              <p>Total Unaccounted: {variance}</p> 
+          ) : null}
           <p>Total Paid: {totalPaid} ({totalPaidPercent}%)</p>
 
           <hr></hr>
 
-          <p>{totalPerSplitter}</p>
-
-          {nameLookUp && nameLookUp.length ? (
+          <table className='modalTable'>
+            <thead>
+                <tr>
+                    <th>Billed to</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {nameLookUp && nameLookUp.length ? (
                 nameLookUp.map(item => (
-                <p>{item.fullName} {item.paidstatus ? 'Paid' : 'Unpaid'}</p>
+                    <tr key={item.id}>
+                        <td>{item.fullName}</td>
+                        {item.paidstatus ? (
+                            <td>{item.amount}</td>
+                        ) : (
+                            <td>
+                                <span style={{color: 'yellow'}}> 
+                                    {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
+                                </span> &nbsp;
+                                <span style={{opacity: '.5'}}>
+                                    {item.amount} (Prev)
+                                </span>
+                            </td>
+                        )}
+                        <td className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                            {item.paidstatus ? 'Paid' : 'Unpaid'}
+                        </td>
+                    </tr>
                 ))
                 ) : (
-                  <p>Wala</p>
+                  <tr>
+                    <td colSpan={3}>Wala</td>
+                  </tr>
                 )}
+                
+            </tbody>
+          </table>
+
+          
 
         </>
     )
