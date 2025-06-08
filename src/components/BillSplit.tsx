@@ -1,80 +1,118 @@
 import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc} from "firebase/firestore";
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, getDocs, updateDoc} from "firebase/firestore";
 import Modal from 'react-modal';
 import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill, faSave } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 
 type Participant = {
-        id: string;
-        transactionid: string;
-        userid: string;
-        rowid: string | null;
-        amount: number;
-        paidstatus: string;
-        created: Timestamp;
-        fullName: string | null
-    };
-
+    id: string;
+    transactionid: string;
+    userid: string;
+    rowid: string | null;
+    amount: number;
+    paidstatus: string;
+    created: Timestamp;
+    fullName: string | null
+};
 
 function BillSplit({ transaction_id }: any) {
 
-  const [nameLookUp, setData] = useState<Participant[]>([]);
-  const [totalData, setTotalData] = useState<any>();
+    const [nameLookUp, setData] = useState<Participant[]>([]);
+    const [totalData, setTotalData] = useState<any>();
 
-  const [readableId, setReadableId] = useState<any>();
-  const [transactionAmount, setTransactionAmount] = useState<any>();
-  const [totalPaid, setTotalPaid] = useState<number>();
-  const [totalUnpaid, setTotalUnpaid] = useState<number>();
-  const [variance, setVariance] = useState<number>();
-  
-  const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
-  const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
+    const [readableId, setReadableId] = useState<any>();
+    const [transactionAmount, setTransactionAmount] = useState<any>();
+    const [totalPaid, setTotalPaid] = useState<number>();
+    const [totalUnpaid, setTotalUnpaid] = useState<number>();
+    const [variance, setVariance] = useState<number>();
 
-  const [totalPerSplitter, setTotalPerSplitter] = useState<number>(0);
+    const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
+    const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
 
-  const getName = async (userId: string): Promise<string | null> => {
-          try {
-              const userRef = doc(db, "users", userId!);
-              const userSnap = await getDoc(userRef);
-  
-              if (userSnap.exists()) {
-              const userData = userSnap.data();
-              return userData.name ?? null;
-              } else {
-              console.warn("Name not found.");
-              return null;
-              }
-          } catch (error) {
-              console.error("Error fetching user:", error);
-              return null;
-          }
-      };
-  
-      const getTransaction = async (): Promise<Map<string, any> | null> => {
-          try {
-              const docRef = doc(db, "transactions", transaction_id); 
-              const docSnap = await getDoc(docRef);
-  
-              if (docSnap.exists()) {
-              return new Map(Object.entries(docSnap.data()));
-              } else {
-              console.warn("Transaction not found.");
-              return null;
-              }
-          } catch (error) {
-              console.error("Error fetching transaction:", error);
-              return null;
-          }
-      };
+    const [totalPerSplitter, setTotalPerSplitter] = useState<number>(0);
 
-      const q = query(
-          collection(db, "participants"),
-          where("transactionid", "==", transaction_id),
-        );
-  
+    const getName = async (userId: string): Promise<string | null> => {
+        try {
+            const userRef = doc(db, "users", userId!);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+            const userData = userSnap.data();
+            return userData.name ?? null;
+            } else {
+            console.warn("Name not found.");
+            return null;
+            }
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            return null;
+        }
+    };
+
+    const getTransaction = async (): Promise<Map<string, any> | null> => {
+        try {
+            const docRef = doc(db, "transactions", transaction_id); 
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+            return new Map(Object.entries(docSnap.data()));
+            } else {
+            console.warn("Transaction not found.");
+            return null;
+            }
+        } catch (error) {
+            console.error("Error fetching transaction:", error);
+            return null;
+        }
+    };
+
+    const acceptSplit = async (tId: any, users: any, splitAmount: any) => {
+
+        for (const [userid, amount] of users) {
+            const q = query(
+                collection(db, "participants"),
+                where("transactionid", "==", tId),
+                where("userid", "==", userid),
+            ); 
+
+            
+            try {
+                // console.log(tId);
+                // console.log(userid);
+                // console.log(amount);
+                
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    console.warn(`No matching documents for user: ${userid}`);
+                    continue;
+                }
+
+                const updatePromises = querySnapshot.docs.map((docSnap) => {
+                    console.log(`Updating document: ${docSnap.id}`);
+                    return updateDoc(docSnap.ref, {
+                        amount: splitAmount
+                    });
+                });
+                
+                await Promise.all(updatePromises); // Optional: await inside loop or batch all at the end
+                console.log('Sakses paps');
+            } catch (err) {
+                console.error("Update failed:", err);
+            }
+        }
+
+
+    };
+
+    const q = query(
+        collection(db, "participants"),
+        where("transactionid", "==", transaction_id),
+    );
+    
       useEffect(() => {
           if (!transaction_id) return;
   
@@ -154,9 +192,13 @@ function BillSplit({ transaction_id }: any) {
           fetchRowId();
       }, [transaction_id, totalData, totalPaid]); 
 
+      const userTuple = [...nameLookUp.values()].map(item => [item.userid, item.amount]);
+
     return (
 
         <>
+        
+        <div className="modal-content"></div>
           <p>Total Amount: {transactionAmount} </p> 
           <p>Total Accounted: {totalData} ({totalAccountedPercent}%)</p> 
           {(variance ?? 0) > 0 ? (
@@ -204,6 +246,16 @@ function BillSplit({ transaction_id }: any) {
                 
             </tbody>
           </table>
+
+          <hr></hr>
+
+          <button
+            className={styles.iconBtn}
+            onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
+          >
+            <FontAwesomeIcon icon={faSave} />
+            Accept
+          </button>
 
           
 
