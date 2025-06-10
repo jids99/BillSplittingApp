@@ -71,40 +71,47 @@ function BillSplit({ transaction_id }: any) {
 
     const acceptSplit = async (tId: any, users: any, splitAmount: any) => {
 
-        for (const [userid, amount] of users) {
-            const q = query(
-                collection(db, "participants"),
-                where("transactionid", "==", tId),
-                where("userid", "==", userid),
-            ); 
+        console.log('------- SPLITTING ------- ');
 
-            
-            try {
-                // console.log(tId);
-                // console.log(userid);
-                // console.log(amount);
-                
-                const querySnapshot = await getDocs(q);
+        for (const [userid, fullName, paidstatus] of users) {
 
-                if (querySnapshot.empty) {
-                    console.warn(`No matching documents for user: ${userid}`);
-                    continue;
-                }
-
-                const updatePromises = querySnapshot.docs.map((docSnap) => {
-                    console.log(`Updating document: ${docSnap.id}`);
-                    return updateDoc(docSnap.ref, {
-                        amount: splitAmount
+            if(!paidstatus) {
+                const q = query(
+                    collection(db, "participants"),
+                    where("transactionid", "==", tId),
+                    where("userid", "==", userid),
+                ); 
+    
+                try {
+                    
+                    const querySnapshot = await getDocs(q);
+    
+                    if (querySnapshot.empty) {
+                        console.warn(`No matching documents for user: ${userid}`);
+                        continue;
+                    }
+    
+                    const updatePromises = querySnapshot.docs.map((docSnap) => {
+                        console.log(`-- Updating document: ${docSnap.id}`);
+                        console.log(`-- User: `, fullName.toUpperCase());
+                        return updateDoc(docSnap.ref, {
+                            amount: splitAmount
+                        });
                     });
-                });
-                
-                await Promise.all(updatePromises); // Optional: await inside loop or batch all at the end
-                console.log('Sakses paps');
-            } catch (err) {
-                console.error("Update failed:", err);
+                    
+                    await Promise.all(updatePromises); 
+                    console.log('[/] Sakses paps');
+                } catch (err) {
+                    console.error("Update failed:", err);
+                }
+                console.log('-------------- ');
+            } else {
+                console.log("[x] Huh? Paid na ata to si paps: ", fullName.toUpperCase());
+                console.log('-------------- ');
+                continue;
             }
-        }
 
+        }
 
     };
 
@@ -192,7 +199,7 @@ function BillSplit({ transaction_id }: any) {
           fetchRowId();
       }, [transaction_id, totalData, totalPaid]); 
 
-      const userTuple = [...nameLookUp.values()].map(item => [item.userid, item.amount]);
+      const userTuple = [...nameLookUp.values()].map(item => [item.userid, item.fullName, item.paidstatus]);
 
     return (
 
