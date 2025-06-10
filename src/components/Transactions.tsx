@@ -76,16 +76,19 @@ function Transactions({ user_id }: any) {
   };
 
     useEffect(() => {
+      if (!user_id) return;
         const q = query(
           collection(db, "transactions"),
           where("userid", "==", user_id),
         );  
+
     
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const items = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data(),
           }));
+          if (snapshot.empty) return;
           const doc = snapshot.docs[0];
           setSelectedTransactionId(doc.id);
           setData(items);
