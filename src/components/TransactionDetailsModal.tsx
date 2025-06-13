@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 import BillSplit from './BillSplit';
+import { acceptSplit } from './Utils';
 
 type Participant = {
         id: string;
@@ -30,6 +31,9 @@ function TransactionDetailsModal({ transaction_id}: any) {
     
     const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
     const [totalAccountedPercent, setTotalAccountedPercent] = useState<number>();
+
+    const [transactionAmount, setTransactionAmount] = useState<any>();
+    const [totalPerSplitter, setTotalPerSplitter] = useState<number>(0);
 
     const q = query(
           collection(db, "participants"),
@@ -152,9 +156,13 @@ function TransactionDetailsModal({ transaction_id}: any) {
         if (!transaction_id) return;
 
         const result: Map<string, any> | null = await getTransaction();
+        const kalahoks = nameLookUp;
+        
         // total by transaction
         const totalamount = result?.get("amount");
         const totalpaid = totalPaid ? totalPaid : 0;
+
+        setTransactionAmount(totalamount);
 
         setReadableId((result ?? null)?.get("rowid"));
         setVariance(totalamount - totalData);
@@ -166,10 +174,20 @@ function TransactionDetailsModal({ transaction_id}: any) {
         setTotalPaidPercent(Math.round(totalpaidpercent));
         setTotalAccountedPercent(Math.round(totalaccountedpercent));
 
+        // change totalSplitters per condition
+        const totalSplitters = kalahoks.filter(item => Number(item.paidstatus) === 0).length;
+
+        // change transactionAmount per condition
+        const totalEach = (transactionAmount - totalpaid) / totalSplitters;
+
+        setTotalPerSplitter(Math.round(totalEach));
+
         };
 
         fetchRowId();
     }, [transaction_id, totalData, totalPaid]); 
+
+    const userTuple = [...nameLookUp.values()].map(item => [item.userid, item.fullName, item.paidstatus]);
 
     return (
 
@@ -185,6 +203,7 @@ function TransactionDetailsModal({ transaction_id}: any) {
                         <div style={{display: 'flex'}}>
                             <button 
                             className={styles.iconBtn}
+                            onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
                             >
                                 <FontAwesomeIcon icon={faMoneyBill} />
                                 Split Even
