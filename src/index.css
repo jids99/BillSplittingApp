@@ -210,7 +210,15 @@ select {
   border-color: var(--c-bruh-light);
 }
 
-.modalTable th, td {
+table {
+  display: inline-block;
+}
+
+.modalTable td {
+  padding: .25rem .5rem;
+}
+
+.modalTable th {
   padding: .25rem .5rem;
 }
 
