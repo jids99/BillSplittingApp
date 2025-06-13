@@ -18,7 +18,12 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-table th, td {
+table td {
+  padding: .5rem 1rem;
+  text-align: start;
+}
+
+table th {
   padding: .5rem 1rem;
   text-align: start;
 }

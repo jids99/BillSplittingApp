@@ -210,8 +210,15 @@ select {
   border-color: var(--c-bruh-light);
 }
 
+
+
 table {
   display: inline-block;
+  table-layout: auto;
+}
+
+td {
+    font-size: var(--fs-s);
 }
 
 .modalTable td {
