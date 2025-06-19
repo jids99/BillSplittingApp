@@ -5,15 +5,14 @@
 .transactionsContainer {
     display: flex;
     gap: 1.5rem;
-    
+    align-items: flex-start;
 }
 
-.transactionsContainer > table {
+table {
     border: 1px solid white;
     border-radius: 1rem;
     padding: 1rem;
     /* min-width: 550px; */
-
 }
 
 hr {
@@ -52,6 +51,14 @@ button {
 .twoColumnContainer {
     display: flex;
 }
+
+.tableContainer {
+  width: auto;
+  table-layout: auto;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
 
 @media (max-width: 1440px) {
     .transactionsContainer {

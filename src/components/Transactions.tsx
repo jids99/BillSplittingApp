@@ -120,93 +120,98 @@ function Transactions({ user_id }: any) {
 
         <div className={styles.transactionsContainer}>
 
-          <MyBills user_id={user_id} />
-
-          <table>
-              <thead>
-                  <tr>
-                    <td colSpan={6}>
-                      <div className={styles.thActions}>
-                        <div className='table-title'>
-                          <h2>Transactions</h2>
-                          <p>MGA CNOVER MO</p>
-                        </div>
-                        <button onClick={openAddModal}>
-                        <FontAwesomeIcon icon={faPlus} />
-                        </button>
-                    </div>
-                        <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
-                    </td>
-                  </tr>
-                  <tr>
-                      <th hidden> ID </th>
-                      <th> Transaction </th>
-                      <th> Date </th>
-                      <th> Amount </th>
-                      <th> Status </th>
-                      {/* <th> Created </th> */}
-                      <td></td>
-                  </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                      <p className='hint' style={{textAlign: 'end'}}> 
-                        2. Tapos click ka isa dito 
-                      </p>
-                    </td>
-                </tr>
-
-                {data && data.length ? (
-                  
-                  data.map(item => (
-                  <tr 
-                  key={item.id}
-                  onClick={() => handleRowClick(item.id)}
-                  >
-                    <td hidden>{item.id}</td>
-                      <td> {item.rowid} </td>
-                      <td> {item.eventDate} </td>
-                      <td> ₱ {item.amount} </td>
-                      <td> 
-                        <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
-                            {item.paidstatus ? 'Paid' : 'Unpaid'}
-                        </div> 
-                      </td>
-                      {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                      <td >
-                        <button
-                          className=""
-                          onClick={() => openEditModal(item)}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                            onClick={() => deleteTransaction(item.id)}
-                            className="danger"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
+          <div className='tableContainer'>
+            <MyBills user_id={user_id} />
+          </div>
+          <div className='tableContainer'>
+            <table className="responsive-table">
+                <thead>
+                    <tr>
+                      <td colSpan={6}>
+                        <div className={styles.thActions}>
+                          <div className='table-title'>
+                            <h2>Transactions</h2>
+                            <p>MGA CNOVER MO</p>
+                          </div>
+                          <button onClick={openAddModal}>
+                          <FontAwesomeIcon icon={faPlus} />
+                          </button>
+                      </div>
+                          <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
                       </td>
                     </tr>
+                    <tr>
+                        <th hidden> ID </th>
+                        <th> Transaction </th>
+                        <th> Date </th>
+                        <th> Amount </th>
+                        <th> Status </th>
+                        {/* <th> Created </th> */}
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className='hint'>
+                        <p className='hint' style={{textAlign: 'end'}}> 
+                          2. Tapos click ka isa dito 
+                        </p>
+                      </td>
+                  </tr>
+
+                  {data && data.length ? (
+                    
+                    data.map(item => (
+                    <tr 
+                    key={item.id}
+                    onClick={() => handleRowClick(item.id)}
+                    >
+                      <td hidden>{item.id}</td>
+                        <td> {item.rowid} </td>
+                        <td> {item.eventDate} </td>
+                        <td> ₱ {item.amount} </td>
+                        <td> 
+                          <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                              {item.paidstatus ? 'Paid' : 'Unpaid'}
+                          </div> 
+                        </td>
+                        {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
+                        <td >
+                          <button
+                            className=""
+                            onClick={() => openEditModal(item)}
+                          >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </button>
+                          <button
+                              onClick={() => deleteTransaction(item.id)}
+                              className="danger"
+                          >
+                              <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </td>
+                      </tr>
+                    
+                    ))
+                    
+                  ) : (
+                    <tr><td colSpan={6}>Wala</td></tr>
+                  )}
                   
-                  ))
-                  
-                ) : (
-                  <tr><td colSpan={6}>Wala</td></tr>
-                )}
-                 
-              </tbody>
-              <tfoot>
-                <tr>
-                  {/* show all comp */}
-                  <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
-                </tr>
-              </tfoot>
-          </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    {/* show all comp */}
+                    <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
+                  </tr>
+                </tfoot>
+            </table>
+          </div>
 
           {selectedTransactionId && (
-            <TransactionDetails user={user_id} transaction_id={selectedTransactionId} isCalledOnModal={false}/>
+            <div className='tableContainer'>
+              <TransactionDetails user={user_id} transaction_id={selectedTransactionId} isCalledOnModal={false}/>
+            </div>
           )}
         </div>
 

@@ -143,7 +143,7 @@ function TransactionDetails({ transaction_id }: any) {
     return (
 
         <>
-        <table>
+        <table className="responsive-table">
             <thead>
                 <tr>
                   <td colSpan={6}>
@@ -177,11 +177,6 @@ function TransactionDetails({ transaction_id }: any) {
                     <td></td>
                 </tr>
                 
-                <tr>
-                    <td colSpan={5}>
-                        <hr />
-                    </td>
-                </tr>
                 
             </thead>
             <tbody>
@@ -225,38 +220,24 @@ function TransactionDetails({ transaction_id }: any) {
                 ) : (
                   <tr><td colSpan={6}>Wala</td></tr>
                 )}
+          
                 <tr>
-                    <td colSpan={5}>
-                        <hr />
+                    <td>
+                        Total (Accounted): {totalData} ({totalAccountedPercent}%) <br />
+                        {(variance ?? 0) > 1 ? (
+                            <span>Unaccounted {variance}</span>
+                        ) : null}
                     </td>
                 </tr>
+       
                 <tr>
-                    <th>Total (Accounted)</th>
-                    <th>{totalData}  ({totalAccountedPercent}%)</th>
-                    <td colSpan={2}></td>
-                </tr>
-                {variance ? (
-                    <tr className={styles.subtotal}>
-                        <td>Unaccounted</td>
-                        <td>{variance}</td>
-                    </tr>
-                ) : null}
-
-                <tr>
-                    <td colSpan={5}>
-                        <hr />
+                    <td>
+                        Paid: {totalPaid} ({totalPaidPercent}%) <br />
+                        {totalUnpaid ? (
+                                <span>Unpaid {totalUnpaid} </span>
+                        ) : null}
                     </td>
                 </tr>
-                <tr>
-                    <th>Paid</th>
-                    <th>{totalPaid} ({totalPaidPercent}%)</th>
-                </tr>
-                {totalUnpaid ? (
-                    <tr className={styles.subtotal}>
-                        <td>Unpaid</td>
-                        <td>{totalUnpaid}</td>
-                    </tr>
-                ) : null}
                 
             </tbody>
         </table>

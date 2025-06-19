@@ -166,6 +166,7 @@ select {
   font-weight: lighter;
   color: burlywood;
   display: none;
+  visibility: hidden;
 }
 
 .badge {
@@ -210,11 +211,18 @@ select {
   border-color: var(--c-bruh-light);
 }
 
-
-
 table {
   display: inline-block;
   table-layout: auto;
+}
+
+thead, tbody {
+  display: table-header-group; /* or just remove display setting entirely */
+  width: 100%; /* optional, but fine */
+}
+
+td, th {
+  width: auto;
 }
 
 td {
@@ -264,12 +272,66 @@ td {
   margin: 0;
 }
 
-@media (max-width: 1440px) {
-    
-    
-
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
 }
 
+.responsive-table th, 
+.responsive-table td {
+  /* border: 1px solid #ddd; */
+  padding: 0.75rem;
+  text-align: left;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+
+  td[data-label] {
+    display: block;
+  }
+
+  td {
+    min-width: 13rem;
+  }
+
+  td[data-label]::before {
+    content: attr(data-label);
+    color: white !important;
+  }
+
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, .25);
+    padding: 0.5rem;
+  }
+
+  .responsive-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333;
+  }
+}
+
+
+
+
+@media (max-width: 1440px) {
+
+}
 
 /* 
 @media (prefers-color-scheme: light) {

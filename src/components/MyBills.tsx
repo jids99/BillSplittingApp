@@ -118,7 +118,7 @@ function MyBills({ user_id }: any) {
     return (
 
         <>
-          <table>
+          <table className="responsive-table">
               <thead>
                   <tr>
                     <td colSpan={6}>
@@ -135,7 +135,7 @@ function MyBills({ user_id }: any) {
                     </td>
                   </tr>
                   <tr>
-                      <th hidden> ID </th>
+                      {/* <th hidden> ID </th> */}
                       <th> Transaction </th>
                       <th> Biller </th>
                       <th> Date </th>
@@ -153,18 +153,18 @@ function MyBills({ user_id }: any) {
                   <tr 
                   key={item.id}
                   >
-                    <td hidden>{item.id}</td>
-                      <td> {item.rowid} </td>
-                      <td> {item.billerName} </td>
-                      <td> {item.eventDate} </td>
-                      <td> ₱ {item.amount} </td>
-                      <td> 
+                    {/* <td hidden>{item.id}</td> */}
+                      <td data-label="ID"> {item.rowid} </td>
+                      <td data-label="Biller"> {item.billerName} </td>
+                      <td data-label="Date"> {item.eventDate} </td>
+                      <td data-label="Amount"> ₱ {item.amount} </td>
+                      <td data-label="Status"> 
                         <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                             {item.paidstatus ? 'Paid' : 'Unpaid'}
                         </div> 
                       </td>
                       {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                      <td>
+                      <td data-label="Actions">
                         {item.paidstatus ? (
                             <button
                                 onClick={() => undoPayment(item.id)}
