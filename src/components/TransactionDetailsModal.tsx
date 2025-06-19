@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc} from "firebase/firestore";
-import Modal from 'react-modal';
-import TransactionDetailsAdd from './TransactionDetailsAdd';
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp} from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
-import BillSplit from './BillSplit';
 import { acceptSplit, deleteParticipant, markAsPaid, undoPayment, getName  } from './Utils';
 
 type Participant = {
@@ -249,7 +246,6 @@ function TransactionDetailsModal({ transaction_id}: any) {
                 
             </tbody>
         </table>
-                        
             
         </>
     )

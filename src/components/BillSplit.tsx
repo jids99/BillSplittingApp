@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, getDocs, updateDoc} from "firebase/firestore";
-import Modal from 'react-modal';
-import TransactionDetailsAdd from './TransactionDetailsAdd';
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp} from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 import { acceptSplit } from './Utils';
 
@@ -24,10 +22,8 @@ function BillSplit({ transaction_id }: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
 
-    const [readableId, setReadableId] = useState<any>();
     const [transactionAmount, setTransactionAmount] = useState<any>();
     const [totalPaid, setTotalPaid] = useState<number>();
-    const [totalUnpaid, setTotalUnpaid] = useState<number>();
     const [variance, setVariance] = useState<number>();
 
     const [totalPaidPercent, setTotalPaidPercent] = useState<number>();
@@ -131,9 +127,7 @@ function BillSplit({ transaction_id }: any) {
 
           setTransactionAmount(totalamount);
 
-          setReadableId((result ?? null)?.get("rowid"));
           setVariance(transactionAmount - totalData);
-          setTotalUnpaid(transactionAmount - totalpaid);
   
           const totalpaidpercent = totalPaid ? (totalpaid / totalamount) * 100 : 0;
           const totalaccountedpercent = totalData ? (totalData / totalamount) * 100 : 0;

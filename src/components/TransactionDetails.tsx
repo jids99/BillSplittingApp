@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
-import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, deleteDoc, updateDoc} from "firebase/firestore";
+import { collection, query, onSnapshot, where, doc, getDoc, Timestamp} from "firebase/firestore";
 import Modal from 'react-modal';
 import TransactionDetailsAdd from './TransactionDetailsAdd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
