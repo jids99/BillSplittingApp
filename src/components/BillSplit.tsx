@@ -152,7 +152,7 @@ function BillSplit({ transaction_id }: any) {
           };
   
           fetchRowId();
-      }, [transaction_id, totalData, totalPaid]); 
+      }, [transaction_id, totalData, totalPaid, nameLookUp]); 
 
       const userTuple = [...nameLookUp.values()].map(item => [item.userid, item.fullName, item.paidstatus]);
 

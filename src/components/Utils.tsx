@@ -4,6 +4,7 @@ import { collection, query, where, getDocs, updateDoc} from "firebase/firestore"
 export const acceptSplit = async (tId: any, users: any, splitAmount: any) => {
 
         console.log('------- SPLITTING ------- ');
+        console.log('SPLIT AMOUNT: ', splitAmount);
 
         for (const [userid, fullName, paidstatus] of users) {
 
