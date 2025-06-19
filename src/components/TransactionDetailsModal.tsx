@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faClose, faTrash, faCheck, faUndo, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import styles from './Transactions.module.css';
 import BillSplit from './BillSplit';
-import { acceptSplit } from './Utils';
+import { acceptSplit, deleteParticipant, markAsPaid, undoPayment, getName  } from './Utils';
 
 type Participant = {
         id: string;
@@ -39,56 +39,6 @@ function TransactionDetailsModal({ transaction_id}: any) {
           collection(db, "participants"),
           where("transactionid", "==", transaction_id),
         );
-
-    const deleteParticipant = async (id: string) => {
-        const confirmed = window.confirm("Are you sure you want to delete this entry?");
-        if (!confirmed) return;
-
-        try {
-            await deleteDoc(doc(db, "participants", id));
-            console.log("Deleted");
-        } catch (error) {
-            console.error("Error deleting:", error);
-        }
-    };
-
-    const markAsPaid = async (id: string) => {
-        try {
-            await updateDoc(doc(db, "participants", id), {
-                paidstatus: 1
-            });
-        } catch (err) {
-            console.error("Update failed:", err);
-        }
-    };
-
-    const undoPayment = async (id: string) => {
-        try {
-            await updateDoc(doc(db, "participants", id), {
-                paidstatus: 0
-            });
-        } catch (err) {
-            console.error("Update failed:", err);
-        }
-    };
-
-    const getName = async (userId: string): Promise<string | null> => {
-        try {
-            const userRef = doc(db, "users", userId!);
-            const userSnap = await getDoc(userRef);
-
-            if (userSnap.exists()) {
-            const userData = userSnap.data();
-            return userData.name ?? null;
-            } else {
-            console.warn("Name not found.");
-            return null;
-            }
-        } catch (error) {
-            console.error("Error fetching user:", error);
-            return null;
-        }
-    };
 
     const getTransaction = async (): Promise<Map<string, any> | null> => {
         try {
@@ -221,8 +171,6 @@ function TransactionDetailsModal({ transaction_id}: any) {
                     {/* <th> Created </th> */}
                     <td></td>
                 </tr>
-                
-              
                 
             </thead>
             <tbody>
