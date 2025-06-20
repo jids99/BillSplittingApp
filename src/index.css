@@ -216,10 +216,11 @@ table {
   table-layout: auto;
 }
 
-thead, tbody {
+thead, tbody, caption {
   display: table-header-group; /* or just remove display setting entirely */
   width: 100%; /* optional, but fine */
 }
+
 
 td, th {
   width: auto;
@@ -288,6 +289,10 @@ td {
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
 
+  .readable-id, .btn-name, .table-description {
+    display: none;
+  }
+
   td[data-label] {
     display: block;
   }
@@ -296,9 +301,17 @@ td {
     min-width: 13rem;
   }
 
-  td[data-label]::before {
-    content: attr(data-label);
-    color: white !important;
+  .actionsContainer {
+    display: flex;
+    gap: .15rem;
+  }
+
+  caption h2 {
+    margin: 0;
+  }
+
+  caption td {
+    display: block !important;
   }
 
   .responsive-table thead {
@@ -316,14 +329,16 @@ td {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
   }
 
   .responsive-table td::before {
     content: attr(data-label);
     font-weight: bold;
-    color: #333;
+    color: white;
   }
+
+  
 }
 
 

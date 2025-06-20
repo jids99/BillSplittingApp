@@ -125,23 +125,26 @@ function Transactions({ user_id }: any) {
           </div>
           <div className='tableContainer'>
             <table className="responsive-table">
-                <thead>
-                    <tr>
-                      <td colSpan={6}>
-                        <div className={styles.thActions}>
-                          <div className='table-title'>
-                            <h2>Transactions</h2>
-                            <p>MGA CNOVER MO</p>
-                          </div>
-                          <button onClick={openAddModal}>
-                          <FontAwesomeIcon icon={faPlus} />
-                          </button>
+              <caption>
+                <tr>
+                  <td colSpan={6}>
+                    <div className={styles.thActions}>
+                      <div className='table-title'>
+                        <h2>Transactions</h2>
+                        <p className='table-description'>MGA CNOVER MO</p>
                       </div>
-                          <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
-                      </td>
-                    </tr>
+                      <button onClick={openAddModal}>
+                      <FontAwesomeIcon icon={faPlus} />
+                      </button>
+                  </div>
+                      <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
+                  </td>
+                </tr>
+              </caption>
+                <thead>
+                    
                     <tr>
-                        <th hidden> ID </th>
+                        {/* <th hidden> ID </th> */}
                         <th> Transaction </th>
                         <th> Date </th>
                         <th> Amount </th>
@@ -166,29 +169,31 @@ function Transactions({ user_id }: any) {
                     key={item.id}
                     onClick={() => handleRowClick(item.id)}
                     >
-                      <td hidden>{item.id}</td>
-                        <td> {item.rowid} </td>
-                        <td> {item.eventDate} </td>
-                        <td> ₱ {item.amount} </td>
-                        <td> 
+                      {/* <td hidden>{item.id}</td> */}
+                        <td data-label='ID'> {item.rowid} </td>
+                        <td data-label='Date'> {item.eventDate} </td>
+                        <td data-label='Amount'> ₱ {item.amount} </td>
+                        <td data-label='Status'> 
                           <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                               {item.paidstatus ? 'Paid' : 'Unpaid'}
                           </div> 
                         </td>
                         {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                        <td >
-                          <button
-                            className=""
-                            onClick={() => openEditModal(item)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </button>
-                          <button
-                              onClick={() => deleteTransaction(item.id)}
-                              className="danger"
-                          >
-                              <FontAwesomeIcon icon={faTrash} />
-                          </button>
+                        <td data-label='Actions' >
+                          <div className='actionsContainer'>
+                            <button
+                              className=""
+                              onClick={() => openEditModal(item)}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </button>
+                            <button
+                                onClick={() => deleteTransaction(item.id)}
+                                className="danger"
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     

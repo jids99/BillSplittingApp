@@ -144,13 +144,13 @@ function TransactionDetails({ transaction_id }: any) {
 
         <>
         <table className="responsive-table">
-            <thead>
+            <caption>
                 <tr>
                   <td colSpan={6}>
                     <div className={styles.thActions}>
                         <div className='table-title'>
-                            <h2>Payers | {readableId}</h2>
-                            <p>MAY UTANG SA IMO</p>
+                            <h2>Payers <span className='readable-id'>| {readableId}</span></h2>
+                            <p className='table-description'>MAY UTANG SA IMO</p>
                         </div>
                         <div style={{display: 'flex'}}>
                             <button 
@@ -158,7 +158,7 @@ function TransactionDetails({ transaction_id }: any) {
                             onClick={openSplitModal}
                             >
                                 <FontAwesomeIcon icon={faMoneyBill} />
-                                Split Even
+                                <span className='btn-name'>Split Even</span>
                             </button>
                             <button onClick={openAddModal}>
                                 <FontAwesomeIcon icon={faPlus} />
@@ -168,8 +168,10 @@ function TransactionDetails({ transaction_id }: any) {
                         <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
                   </td>
                 </tr>
+            </caption>
+            <thead>
                 <tr>
-                    <th hidden> Transaction </th>
+                    {/* <th hidden> Transaction </th> */}
                     <th> Billed to </th>
                     <th> Amount </th>
                     <th> Status </th>
@@ -183,37 +185,39 @@ function TransactionDetails({ transaction_id }: any) {
                 {nameLookUp && nameLookUp.length ? (
                 nameLookUp.map(item => (
                 <tr key={item.id}>
-                    <td hidden> {item.transactionid} </td>
-                    <td> {item.fullName} </td>
-                    <td> ₱ {item.amount} </td>
-                    <td> 
+                    {/* <td hidden> {item.transactionid} </td> */}
+                    <td data-label='Billed to'> {item.fullName} </td>
+                    <td data-label='Amount'> ₱ {item.amount} </td>
+                    <td data-label='Status'> 
                         <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                             {item.paidstatus ? 'Paid' : 'Unpaid'}
                         </div> 
                     </td>
                     {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                    <td>
-                        {item.paidstatus ? (
+                    <td data-label='Actions'>
+                        <div className='actionsContainer'>
+                            {item.paidstatus ? (
+                                <button
+                                    onClick={() => undoPayment(item.id)}
+                                    className="bruh"
+                                >
+                                    <FontAwesomeIcon icon={faUndo} />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => markAsPaid(item.id)}
+                                    className="success"
+                                >
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </button>
+                            )}
                             <button
-                                onClick={() => undoPayment(item.id)}
-                                className="bruh"
+                                onClick={() => deleteParticipant(item.id)}
+                                className="danger"
                             >
-                                <FontAwesomeIcon icon={faUndo} />
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
-                        ) : (
-                            <button
-                                onClick={() => markAsPaid(item.id)}
-                                className="success"
-                            >
-                                <FontAwesomeIcon icon={faCheck} />
-                            </button>
-                        )}
-                        <button
-                            onClick={() => deleteParticipant(item.id)}
-                            className="danger"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
+                        </div>
                     </td>
                 </tr>
                 ))
