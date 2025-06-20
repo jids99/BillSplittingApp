@@ -50,6 +50,7 @@ button {
 
 .twoColumnContainer {
     display: flex;
+    flex-direction: row;
 }
 
 .tableContainer {
@@ -67,8 +68,16 @@ button {
     }
 
     .twoColumnContainer {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
     
+
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+    .twoColumnContainer {
+        flex-direction: column-reverse;
+    }
 
 }

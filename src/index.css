@@ -246,13 +246,13 @@ td {
   font-size: var(--fs-xs);
 }
 
-.modalTable button {
+/* .modalTable button {
   scale: .8;
 }
 
 .modalTable .badge {
   scale: .8;
-}
+} */
 
 .modalTable hr {
   padding: 0;

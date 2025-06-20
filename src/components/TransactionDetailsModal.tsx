@@ -139,13 +139,13 @@ function TransactionDetailsModal({ transaction_id}: any) {
     return (
 
         <>
-        <table className='modalTable'>
-            <thead>
+        <table className='modalTable responsive-table'>
+            <caption>
                 <tr>
                   <td colSpan={6}>
                     <div className={styles.thActions}>
                         <div className='table-title'>
-                            <h3>Payers | {readableId}</h3>
+                            <h3>Payers <span className='readable-id'>| {readableId}</span></h3>
                         </div>
                         <div style={{display: 'flex'}}>
                             <button 
@@ -153,15 +153,17 @@ function TransactionDetailsModal({ transaction_id}: any) {
                             onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
                             >
                                 <FontAwesomeIcon icon={faMoneyBill} />
-                                Split Even
+                                <span className='btn-name'>Split Even</span>
                             </button>
                         </div>
                     </div>
                         <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
                   </td>
                 </tr>
+            </caption>
+            <thead>
                 <tr>
-                    <th hidden> Transaction </th>
+                    {/* <th hidden> Transaction </th> */}
                     <th> Billed to </th>
                     <th> Amount </th>
                     <th> Status </th>
@@ -174,37 +176,39 @@ function TransactionDetailsModal({ transaction_id}: any) {
                 {nameLookUp && nameLookUp.length ? (
                 nameLookUp.map(item => (
                 <tr key={item.id}>
-                    <td hidden> {item.transactionid} </td>
-                    <td> {item.fullName} </td>
-                    <td> ₱ {item.amount} </td>
-                    <td> 
+                    {/* <td hidden> {item.transactionid} </td> */}
+                    <td data-label='Billed to'> {item.fullName} </td>
+                    <td data-label='Amount'> ₱ {item.amount} </td>
+                    <td data-label='Status'> 
                         <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                             {item.paidstatus ? 'Paid' : 'Unpaid'}
                         </div> 
                     </td>
                     {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                    <td>
-                        {item.paidstatus ? (
+                    <td data-label='Actions'>
+                        <div className='actionsContainer'>
+                            {item.paidstatus ? (
+                                <button
+                                    onClick={() => undoPayment(item.id)}
+                                    className="bruh"
+                                >
+                                    <FontAwesomeIcon icon={faUndo} />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => markAsPaid(item.id)}
+                                    className="success"
+                                >
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </button>
+                            )}
                             <button
-                                onClick={() => undoPayment(item.id)}
-                                className="bruh"
+                                onClick={() => deleteParticipant(item.id)}
+                                className="danger"
                             >
-                                <FontAwesomeIcon icon={faUndo} />
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
-                        ) : (
-                            <button
-                                onClick={() => markAsPaid(item.id)}
-                                className="success"
-                            >
-                                <FontAwesomeIcon icon={faCheck} />
-                            </button>
-                        )}
-                        <button
-                            onClick={() => deleteParticipant(item.id)}
-                            className="danger"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
+                        </div>
                     </td>
                 </tr>
                 ))
@@ -212,37 +216,22 @@ function TransactionDetailsModal({ transaction_id}: any) {
                   <tr><td colSpan={6}>Wala</td></tr>
                 )}
                 <tr>
-                    <td colSpan={5}>
-                        <hr />
+                    <td>
+                        Total (Accounted): {totalData} ({totalAccountedPercent}%) <br />
+                        {(variance ?? 0) > 1 ? (
+                            <span>Unaccounted {variance}</span>
+                        ) : null}
                     </td>
                 </tr>
+       
                 <tr>
-                    <th>Total (Accounted)</th>
-                    <th>{totalData}  ({totalAccountedPercent}%)</th>
-                    <td colSpan={2}></td>
-                </tr>
-                {variance ? (
-                    <tr className={styles.subtotal}>
-                        <td>Unaccounted</td>
-                        <td>{variance}</td>
-                    </tr>
-                ) : null}
-
-                <tr>
-                    <td colSpan={5}>
-                        <hr />
+                    <td>
+                        Paid: {totalPaid} ({totalPaidPercent}%) <br />
+                        {totalUnpaid ? (
+                                <span>Unpaid {totalUnpaid} </span>
+                        ) : null}
                     </td>
                 </tr>
-                <tr>
-                    <th>Paid</th>
-                    <th>{totalPaid} ({totalPaidPercent}%)</th>
-                </tr>
-                {totalUnpaid ? (
-                    <tr className={styles.subtotal}>
-                        <td>Unpaid</td>
-                        <td>{totalUnpaid}</td>
-                    </tr>
-                ) : null}
                 
             </tbody>
         </table>
