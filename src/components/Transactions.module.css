@@ -21,7 +21,8 @@ hr {
 }
 
 .input {
-    width: 170.4px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button {
