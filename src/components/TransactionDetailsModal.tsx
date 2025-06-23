@@ -178,7 +178,16 @@ function TransactionDetailsModal({ transaction_id}: any) {
                 <tr key={item.id}>
                     {/* <td hidden> {item.transactionid} </td> */}
                     <td data-label='Billed to'> {item.fullName} </td>
-                    <td data-label='Amount'> ₱ {item.amount} </td>
+                    <td data-label='Amount'> 
+                        ₱ {item.amount} &nbsp;
+                        {item.paidstatus ? ( 
+                            null
+                        ) : (
+                            <span style={{color: 'yellow', opacity: '.5'}}> 
+                                {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
+                            </span>
+                        )}
+                    </td>
                     <td data-label='Status'> 
                         <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                             {item.paidstatus ? 'Paid' : 'Unpaid'}
