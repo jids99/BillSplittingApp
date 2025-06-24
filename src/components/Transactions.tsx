@@ -15,7 +15,7 @@ type Transaction = {
 };
 
 function Transactions({ user_id }: any) {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any[] | null>([]);
   const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -46,9 +46,6 @@ function Transactions({ user_id }: any) {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
       if (!confirmed) return;
 
-      const q_delete_participations = query(collection(db, "participants"), where("transactionid", "==", id));
-      const snapshot = await getDocs(q_delete_participations);
-
       try {
           await deleteDoc(doc(db, "transactions", id));
           console.log("Deleted");
@@ -56,6 +53,9 @@ function Transactions({ user_id }: any) {
       } catch (error) {
           console.error("Error deleting:", error);
       }
+
+      const q_delete_participations = query(collection(db, "participants"), where("transactionid", "==", id));
+      const snapshot = await getDocs(q_delete_participations);
 
       if (snapshot.empty) {
         console.log("No matching participations.");
@@ -82,16 +82,24 @@ function Transactions({ user_id }: any) {
           where("userid", "==", user_id),
         );  
 
-    
         const unsubscribe = onSnapshot(q, (snapshot) => {
+
+          if (snapshot.empty) {
+            setData([]);
+            return;
+          }
+
           const items = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data(),
           }));
+
           if (snapshot.empty) return;
+
           const doc = snapshot.docs[0];
           setSelectedTransactionId(doc.id);
           setData(items);
+
         });
     
         return () => unsubscribe();
@@ -110,7 +118,7 @@ function Transactions({ user_id }: any) {
       }
     };
 
-     const handleAddedTransaction = (id: any) => {
+    const handleAddedTransaction = (id: any) => {
       setSelectedTransactionId(id);
     };
     
