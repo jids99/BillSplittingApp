@@ -1,7 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+
 
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
@@ -246,14 +244,6 @@ td {
   font-size: var(--fs-xs);
 }
 
-/* .modalTable button {
-  scale: .8;
-}
-
-.modalTable .badge {
-  scale: .8;
-} */
-
 .modalTable hr {
   padding: 0;
 }
@@ -340,8 +330,6 @@ td {
 
   
 }
-
-
 
 
 @media (max-width: 1440px) {
