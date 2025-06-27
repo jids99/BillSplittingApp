@@ -1,6 +1,5 @@
 :root {
 
-
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -9,25 +8,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-    --fs-xxs: 0.5rem; /* mobile data */
-    --fs-xs: 0.75rem; /* data */
-    --fs-s: 0.875rem; /* btn, sidebar items*/
-    --fs-m: 1rem; /* h3 */
-    --fs-l: 1.25rem; /* h2 */
-    --fs-xl: 1.5rem; /* h1 */
-    --fs-xxl: 2rem;
-    --fs-xxxl: 3rem;
-
-    --c-success: #065F46;
-    --c-warning: #92400E;
-    --c-danger: #7F1D1D;
-    --c-bruh: #1F2937;
-
-    --c-success-light: rgba(236, 253, 245, 0.25); /* #ECFDF5 */
-    --c-warning-light: rgba(255, 251, 235, 0.25); /* #FFFBEB */
-    --c-danger-light:  rgba(254, 242, 242, 0.25); /* #FEF2F2 */
-    --c-bruh-light:    rgba(249, 250, 251, 0.25); /* #F9FAFB */
 
 }
 
@@ -84,29 +64,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content * {
-  width: 100%;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .form-group {
   display: flex;
@@ -174,160 +131,12 @@ select {
   min-width: 4rem;
 }
 
-.table-title {
-  display: flex;
-  flex-direction: column;
-  gap: .15rem;
-}
-
-.table-title p {
-  margin: 0;
-  font-size: var(--fs-xs);
-}
-
-.table-title h2 {
-  margin-bottom: 0;
-}
-
-.success {
-  background-color: var(--c-success);
-  border-color: var(--c-success-light);
-}
-
-.warning {
-  background-color: var(--c-warning);
-  border-color: var(--c-warning-light);
-}
-
-.danger {
-  background-color: var(--c-danger);
-  border-color: var(--c-danger-light);
-}
-
-.bruh {
-  background-color: var(--c-bruh);
-  border-color: var(--c-bruh-light);
-}
-
-table {
-  display: inline-block;
-  table-layout: auto;
-}
-
-thead, tbody, caption {
-  display: table-header-group; /* or just remove display setting entirely */
-  width: 100%; /* optional, but fine */
-}
 
 
-td, th {
-  width: auto;
-}
 
-td {
-    font-size: var(--fs-s);
-}
-
-.modalTable td {
-  padding: .25rem .5rem;
-}
-
-.modalTable th {
-  padding: .25rem .5rem;
-}
-
-.modalTable th {
-  font-size: var(--fs-xs);
-}
-
-.modalTable td {
-  font-size: var(--fs-xs);
-}
-
-.modalTable hr {
-  padding: 0;
-}
-
-.modal-title {
-  display: flex;
-  flex-direction: column;
-  gap: .15rem;
-}
-
-.modal-title p {
-  margin: 0;
-  font-size: var(--fs-xs);
-}
-
-.modal-title h2 {
-  margin: 0;
-}
-
-.responsive-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
-}
-
-.responsive-table th, 
-.responsive-table td {
-  /* border: 1px solid #ddd; */
-  padding: 0.75rem;
-  text-align: left;
-}
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
-
-  .readable-id, .btn-name, .table-description {
-    display: none;
-  }
-
-  td[data-label] {
-    display: block;
-  }
-
-  td {
-    min-width: 13rem;
-  }
-
-  .actionsContainer {
-    display: flex;
-    gap: .15rem;
-  }
-
-  caption h2 {
-    margin: 0;
-  }
-
-  caption td {
-    display: block !important;
-  }
-
-  .responsive-table thead {
-    display: none;
-  }
-
-  .responsive-table tr {
-    display: block;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, .25);
-    padding: 0.5rem;
-  }
-
-  .responsive-table td {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, .1);
-  }
-
-  .responsive-table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    color: white;
-  }
-
   
 }
 

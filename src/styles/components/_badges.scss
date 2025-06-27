@@ -1,0 +1,21 @@
+@use '../abstracts/variables' as *;
+
+.success {
+  background-color: $c-success;
+  border-color: $c-success-light;
+}
+
+.warning {
+  background-color: $c-warning;
+  border-color: $c-warning-light;
+}
+
+.danger {
+  background-color: $c-danger;
+  border-color: $c-danger-light;
+}
+
+.bruh {
+  background-color: $c-bruh;
+  border-color: $c-bruh-light;
+}
