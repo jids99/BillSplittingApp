@@ -1,3 +1,4 @@
+@use '../abstracts/variables' as *;
 
 .modal-content {
   display: flex;
@@ -21,4 +22,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.modalTable td {
+  padding: .25rem .5rem;
+}
+
+.modalTable th {
+  padding: .25rem .5rem;
+}
+
+.modalTable th {
+  font-size: $fs-xs;
+}
+
+.modalTable td {
+  font-size: $fs-xs;
+}
+
+.modalTable hr {
+  padding: 0;
+}
+
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+
+.modal-title p {
+  margin: 0;
+  font-size: var(--fs-xs);
+}
+
+.modal-title h2 {
+  margin: 0;
 }

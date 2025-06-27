@@ -1,0 +1,9 @@
+@use '../abstracts/variables' as *;
+
+.hint {
+  font-size: $fs-xs;
+  font-weight: lighter;
+  color: burlywood;
+  display: none;
+  visibility: hidden;
+}

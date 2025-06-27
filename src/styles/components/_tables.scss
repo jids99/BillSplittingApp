@@ -1,87 +1,53 @@
 @use '../abstracts/variables' as *;
 
 
-.table-title {
-  display: flex;
-  flex-direction: column;
-  gap: .15rem;
-}
-
-.table-title p {
-  margin: 0;
-  font-size: var($fs-xs);
-}
-
-.table-title h2 {
-  margin-bottom: 0;
-}
-
 
 table {
   display: inline-block;
   table-layout: auto;
+  border: 1px solid white;
+  border-radius: 1rem;
+  padding: 1rem;
 }
 
-thead, tbody, caption {
-  display: table-header-group; /* or just remove display setting entirely */
-  width: 100%; /* optional, but fine */
-}
+  .table-title {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+  }
 
-td, th {
-  width: auto;
-}
+  .table-title p {
+    margin: 0;
+    font-size: var($fs-xs);
+  }
 
-td {
-    font-size: var(--fs-s);
-}
+  .table-title h2 {
+    margin-bottom: 0;
+  }
 
-.modalTable td {
-  padding: .25rem .5rem;
-}
+  thead, tbody, caption {
+    display: table-header-group; /* or just remove display setting entirely */
+    width: 100%; /* optional, but fine */
+  }
 
-.modalTable th {
-  padding: .25rem .5rem;
-}
+    td, th {
+      width: auto;
+    }
 
-.modalTable th {
-  font-size: var(--fs-xs);
-}
-
-.modalTable td {
-  font-size: var(--fs-xs);
-}
-
-.modalTable hr {
-  padding: 0;
-}
-
-.modal-title {
-  display: flex;
-  flex-direction: column;
-  gap: .15rem;
-}
-
-.modal-title p {
-  margin: 0;
-  font-size: var(--fs-xs);
-}
-
-.modal-title h2 {
-  margin: 0;
-}
+    td {
+        font-size: $fs-s;
+    }
 
 .responsive-table {
-  width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
 }
 
-.responsive-table th, 
-.responsive-table td {
-  /* border: 1px solid #ddd; */
-  padding: 0.75rem;
-  text-align: left;
-}
+  .responsive-table th, 
+  .responsive-table td {
+    padding: 0.5rem;
+    text-align: left;
+  }
 
 @media screen and (max-width: 768px) {
 

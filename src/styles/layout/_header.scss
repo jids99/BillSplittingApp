@@ -1,0 +1,10 @@
+@use '../abstracts/variables' as *;
+
+h1 {
+  font-size: $fs-xl;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: $fs-l;
+}

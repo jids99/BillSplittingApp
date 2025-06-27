@@ -1,0 +1,36 @@
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: .5rem 1rem;
+  font-size: var(--fs-s);
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.btn-container {
+  display: flex;
+  flex: row;
+  gap: .5rem;
+}
+
+.login-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.register-name-btn {
+  border-radius: 0 8px 8px 0;
+}

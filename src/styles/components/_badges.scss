@@ -1,5 +1,12 @@
 @use '../abstracts/variables' as *;
 
+.badge {
+  padding: .2rem .6rem;
+  border-radius: .5rem;
+  text-align: center;
+  min-width: 4rem;
+}
+
 .success {
   background-color: $c-success;
   border-color: $c-success-light;

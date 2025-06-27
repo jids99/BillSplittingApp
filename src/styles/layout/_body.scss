@@ -4,4 +4,7 @@ body {
     font-family: $font-family;
     line-height: $line-height;
     font-weight: $font-weight; 
+    margin: 0;
+    display: flex;
+    place-items: center;
 }
