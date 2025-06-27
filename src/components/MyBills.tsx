@@ -121,20 +121,14 @@ function MyBills({ user_id }: any) {
           <table className="responsive-table">
             
             <caption>
-                <tr>
-                    <td colSpan={6}>
-                        <div className={styles.thActions}>
-                            <div className='table-title'>
-                                <h2>My Bills</h2>
-                                <p className='table-description'>MGA BAYARIN MO</p>
-                            </div>
-                            <button className={styles.iconBtn}>
-                                <FontAwesomeIcon icon={faSliders} /> 
-                                Filter
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                <div className='table-title'>
+                    <h2>My Bills</h2>
+                    <p className='table-description'>MGA BAYARIN MO</p>
+                </div>
+                <button className={styles.iconBtn}>
+                    <FontAwesomeIcon icon={faSliders} /> 
+                    Filter
+                </button>
             </caption>
 
             

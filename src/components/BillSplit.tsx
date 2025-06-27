@@ -154,64 +154,72 @@ function BillSplit({ transaction_id }: any) {
 
         <>
         
-        <div className="modal-content"></div>
-          <p>Total Amount: {transactionAmount} </p> 
-          <p>Total Accounted: {totalData} ({totalAccountedPercent}%)</p> 
-          {(variance ?? 0) > 0 ? (
-              <p>Total Unaccounted: {variance}</p> 
-          ) : null}
-          <p>Total Paid: {totalPaid} ({totalPaidPercent}%)</p>
-
-          <hr></hr>
-
-          <table className='modalTable'>
-            <thead>
-                <tr>
-                    <th>Billed to</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {nameLookUp && nameLookUp.length ? (
-                nameLookUp.map(item => (
-                    <tr key={item.id}>
-                        <td>{item.fullName}</td>
-                        {item.paidstatus ? (
-                            <td>{item.amount}</td>
-                        ) : (
-                            <td>
-                                <span style={{color: 'yellow'}}> 
-                                    {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
-                                </span> &nbsp;
-                                <span style={{opacity: '.5'}}>
-                                    {item.amount} (Prev)
-                                </span>
-                            </td>
-                        )}
-                        <td className={item.paidstatus ? 'badge success' : 'badge warning'}>
-                            {item.paidstatus ? 'Paid' : 'Unpaid'}
-                        </td>
+            <div className="modal-content">
+            <p>
+                <span>Total Amount: </span>
+                <span>{transactionAmount} </span>
+            </p> 
+            <p>
+                <span>Total Accounted: </span>
+                <span>{totalData} ({totalAccountedPercent}%)</span>
+            </p> 
+            {(variance ?? 0) > 0 ? (
+                <p>
+                    <span>Total Unaccounted: </span>
+                    <span>{variance}</span>
+                </p> 
+            ) : null}
+            <p>
+                <span>Total Paid: </span>
+                <span>{totalPaid} ({totalPaidPercent}%)</span>
+            </p>
+            </div>
+            <table className='modalTable'>
+                <thead>
+                    <tr>
+                        <th>Billed to</th>
+                        <th>Amount</th>
+                        <th>Status</th>
                     </tr>
-                ))
-                ) : (
-                  <tr>
-                    <td colSpan={3}>Wala</td>
-                  </tr>
-                )}
-                
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                    {nameLookUp && nameLookUp.length ? (
+                    nameLookUp.map(item => (
+                        <tr key={item.id}>
+                            <td>{item.fullName}</td>
+                            {item.paidstatus ? (
+                                <td>{item.amount}</td>
+                            ) : (
+                                <td>
+                                    <span style={{color: 'yellow'}}> 
+                                        {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
+                                    </span> &nbsp;
+                                    <span style={{opacity: '.5'}}>
+                                        {item.amount} (Prev)
+                                    </span>
+                                </td>
+                            )}
+                            <td className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                                {item.paidstatus ? 'Paid' : 'Unpaid'}
+                            </td>
+                        </tr>
+                    ))
+                    ) : (
+                    <tr>
+                        <td colSpan={3}>Wala</td>
+                    </tr>
+                    )}
+                    
+                </tbody>
+            </table>
 
-          <hr></hr>
-
-          <button
-            className={styles.iconBtn}
-            onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
-          >
-            <FontAwesomeIcon icon={faSave} />
-            Accept
-          </button>
+            <button
+                className={styles.iconBtn}
+                onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
+            >
+                <FontAwesomeIcon icon={faSave} />
+                Accept
+            </button>
 
           
 

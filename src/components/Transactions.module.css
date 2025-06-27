@@ -51,7 +51,6 @@ button {
   border: 1px solid #ccc;
 }
 
-
 @media (max-width: 1440px) {
     .transactionsContainer {
         display: flex;

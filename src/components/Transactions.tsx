@@ -134,20 +134,14 @@ function Transactions({ user_id }: any) {
           <div className='tableContainer'>
             <table className="responsive-table">
               <caption>
-                <tr>
-                  <td colSpan={6}>
-                    <div className={styles.thActions}>
-                      <div className='table-title'>
-                        <h2>Transactions</h2>
-                        <p className='table-description'>MGA CNOVER MO</p>
-                      </div>
-                      <button onClick={openAddModal}>
-                      <FontAwesomeIcon icon={faPlus} />
-                      </button>
-                  </div>
-                      <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
-                  </td>
-                </tr>
+                <div className='table-title'>
+                  <h2>Transactions</h2>
+                  <p className='table-description'>MGA CNOVER MO</p>
+                </div>
+                <button onClick={openAddModal}>
+                <FontAwesomeIcon icon={faPlus} />
+                </button>
+                <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
               </caption>
                 <thead>
                     

@@ -14,18 +14,28 @@ table {
     display: flex;
     flex-direction: column;
     gap: .15rem;
+    text-align: start;
+    padding: .5rem;
   }
 
   .table-title p {
     margin: 0;
-    font-size: var($fs-xs);
+    font-size: $fs-xs;
   }
 
   .table-title h2 {
     margin-bottom: 0;
+    font-size: $fs-l;
   }
 
-  thead, tbody, caption {
+  caption {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  thead, tbody {
     display: table-header-group; /* or just remove display setting entirely */
     width: 100%; /* optional, but fine */
   }

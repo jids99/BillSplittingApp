@@ -3,14 +3,25 @@
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   justify-content: center;
   align-items: center;
+  margin: 1rem 0;
 }
 
 .modal-content * {
   width: 100%;
 }
+
+.modal-content p {
+  margin: .25rem;
+  font-size: $fs-s;
+  display: flex;
+}
+
+.modal-content p > span:last-child {
+  text-align: end;
+}
+
 
 .modal-header {
   display: flex;
@@ -24,20 +35,23 @@
   align-items: center;
 }
 
+.modalTable {
+  padding: .5rem;
+}
+
 .modalTable td {
   padding: .25rem .5rem;
+  font-size: $fs-xs;
 }
 
 .modalTable th {
   padding: .25rem .5rem;
-}
-
-.modalTable th {
   font-size: $fs-xs;
 }
 
-.modalTable td {
-  font-size: $fs-xs;
+.modalTable .badge {
+  scale: .87;
+  padding: .1rem .2rem;
 }
 
 .modalTable hr {
@@ -50,11 +64,11 @@
   gap: .15rem;
 }
 
-.modal-title p {
-  margin: 0;
-  font-size: var(--fs-xs);
-}
+  .modal-title p {
+    margin: 0;
+    font-size: $fs-xs;
+  }
 
-.modal-title h2 {
-  margin: 0;
-}
+  .modal-title h2 {
+    margin: 0;
+  }

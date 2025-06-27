@@ -145,29 +145,23 @@ function TransactionDetails({ transaction_id }: any) {
         <>
         <table className="responsive-table">
             <caption>
-                <tr>
-                  <td colSpan={6}>
-                    <div className={styles.thActions}>
-                        <div className='table-title'>
-                            <h2>Payers <span className='readable-id'>| {readableId}</span></h2>
-                            <p className='table-description'>MAY UTANG SA IMO</p>
-                        </div>
-                        <div style={{display: 'flex'}}>
-                            <button 
-                            className={styles.iconBtn}
-                            onClick={openSplitModal}
-                            >
-                                <FontAwesomeIcon icon={faMoneyBill} />
-                                <span className='btn-name'>Split Even</span>
-                            </button>
-                            <button onClick={openAddModal}>
-                                <FontAwesomeIcon icon={faPlus} />
-                            </button>
-                        </div>
-                    </div>
-                        <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
-                  </td>
-                </tr>
+                <div className='table-title'>
+                    <h2>Payers <span className='readable-id'>| {readableId}</span></h2>
+                    <p className='table-description'>MAY UTANG SA IMO</p>
+                </div>
+                <div style={{display: 'flex'}}>
+                    <button 
+                    className={styles.iconBtn}
+                    onClick={openSplitModal}
+                    >
+                        <FontAwesomeIcon icon={faMoneyBill} />
+                        <span className='btn-name'>Split Even</span>
+                    </button>
+                    <button onClick={openAddModal}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                </div>
+                <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
             </caption>
             <thead>
                 <tr>
