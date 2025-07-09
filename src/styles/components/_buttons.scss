@@ -9,6 +9,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   height: 100%;
+  max-height: 2.5rem;
 }
 
 button:hover {

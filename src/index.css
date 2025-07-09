@@ -1,9 +1,6 @@
 :root {
 
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -20,16 +17,6 @@
   padding: 0;
 }
 
-/* Mobile Styles */
-@media screen and (max-width: 768px) {
-  
-}
-
-
-@media (max-width: 1440px) {
-
-}
-
 /* 
 @media (prefers-color-scheme: light) {
   :root {
@@ -42,4 +29,4 @@
   button {
     background-color: #f9f9f9;
   }
-} */
+} 

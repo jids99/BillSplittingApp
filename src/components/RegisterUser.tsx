@@ -25,17 +25,19 @@ const RegisterUser: React.FC = () => {
     <>
       <div className="card">
           <h2>Wala ka pa?</h2>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setNameInput(String(e.target.value))}
-            placeholder="Name"
-            className="register-name-input"
-          />
-          <button 
-            onClick={handleAdd}
-            className="register-name-btn"
-          >Register</button>
+          <div className="register-btn-group">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setNameInput(String(e.target.value))}
+              placeholder="Name"
+              className="register-name-input"
+            />
+            <button 
+              onClick={handleAdd}
+              className="register-name-btn"
+            >Register</button>
+          </div>
 
           {status && <p>{status}</p>}
       </div>

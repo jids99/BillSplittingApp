@@ -1,7 +1,8 @@
 @use '../abstracts/variables' as *;
 
 input {
-  padding: .5rem 1rem;
+  padding: .45rem .9rem;
+  max-height: 2.5rem;
 }
 
 .form-group {
@@ -26,8 +27,9 @@ input {
 }
 
 select {
-  padding: .5rem 1rem;
+  padding: .45rem .9rem;
 }
+
 
 .register-name-input {
   border-radius: 8px 0 0 8px;

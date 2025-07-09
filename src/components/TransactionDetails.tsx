@@ -248,7 +248,7 @@ function TransactionDetails({ transaction_id }: any) {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
             },
             content: {
-                backgroundColor: '#242424',
+                backgroundColor: 'white',
                 top: '50%',
                 left: '50%',
                 right: 'auto',
@@ -258,7 +258,8 @@ function TransactionDetails({ transaction_id }: any) {
                 padding: '20px',
                 borderRadius: '8px',
                 overflowY: 'auto',
-                maxHeight: '80vh'
+                maxHeight: '80vh',
+                border: '0',
             },
             }}
         >
