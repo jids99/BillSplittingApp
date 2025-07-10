@@ -156,7 +156,13 @@ function MyBills({ user_id }: any) {
                   >
                     {/* <td hidden>{item.id}</td> */}
                       {/* <td data-label="ID"> {item.rowid} </td> */}
-                      <td data-label="Item" title={item.rowid}> {item.budolItem} </td>
+                      <td data-label="Item" title={item.rowid}> 
+                         {(item.budolItem) ? (
+                            <span className='readable-id' title={item.rowid} > {item.budolItem} </span>
+                          ) : (
+                              <b className='danger-text'> (¬_¬") </b>
+                          )}
+                    </td>
                       <td data-label="Biller"> {item.billerName} </td>
                       <td data-label="Date"> {item.eventDate} </td>
                       <td data-label="Amount"> ₱ {item.amount} </td>

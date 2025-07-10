@@ -150,8 +150,12 @@ function TransactionDetails({ transaction_id }: any) {
         <table className="responsive-table">
             <caption>
                 <div className='table-title'>
-                    <h2><span className='readable-id' title={readableId} >{budolItem}
-                            </span>
+                    <h2>
+                        {(budolItem) ? (
+                            <span className='readable-id' title={readableId} > {budolItem} </span>
+                        ) : (
+                            <span className='danger-text'> (¬_¬") </span>
+                        )}
                         </h2>
                     <p className='table-description'>PAYERS</p>
                 </div>
