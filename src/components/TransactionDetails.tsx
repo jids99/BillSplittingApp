@@ -285,7 +285,7 @@ function TransactionDetails({ transaction_id }: any) {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
             },
             content: {
-                backgroundColor: '#242424',
+                backgroundColor: 'white',
                 top: '50%',
                 left: '50%',
                 right: 'auto',

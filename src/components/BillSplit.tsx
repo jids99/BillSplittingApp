@@ -191,7 +191,7 @@ function BillSplit({ transaction_id }: any) {
                                 <td>{item.amount}</td>
                             ) : (
                                 <td>
-                                    <span style={{color: 'yellow'}}> 
+                                    <span className='split-even-amount'> 
                                         {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
                                     </span> &nbsp;
                                     <span style={{opacity: '.5'}}>

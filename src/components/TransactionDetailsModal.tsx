@@ -183,7 +183,7 @@ function TransactionDetailsModal({ transaction_id}: any) {
                         {item.paidstatus ? ( 
                             null
                         ) : (
-                            <span style={{color: 'yellow', opacity: '.5'}}> 
+                            <span className='split-even-amount'> 
                                 {String(totalPerSplitter)} {/*NUMBER TO PERO PINAPACAST NI REACT SA STRING? WTHELLY */}
                             </span>
                         )}
