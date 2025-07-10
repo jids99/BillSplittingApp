@@ -5,11 +5,13 @@ button {
   font-size: var(--fs-s);
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: white;
   cursor: pointer;
+  border-color: #1a1a1a;
   transition: border-color 0.25s;
   height: 100%;
   max-height: 2.5rem;
+  color: #1a1a1a;
 }
 
 button:hover {
