@@ -13,6 +13,7 @@ type Transaction = {
     paidstatus: number;
     created: Timestamp;
     rowid: string | null;
+    budolItem: string | null;
     fullName: string | null
     billerName: string | null
 };
@@ -101,6 +102,7 @@ function MyBills({ user_id }: any) {
                     created: data.created,
                     paidstatus: data.paidstatus,
                     rowid: (transaction ?? null)?.get("rowid"),
+                    budolItem: (transaction ?? null)?.get("budolItem"),
                     fullName: (fullName ?? null),
                     billerName: (billerName ?? null),
                 };
@@ -114,7 +116,6 @@ function MyBills({ user_id }: any) {
         }, 
     [user_id]);
 
-  
     return (
 
         <>
@@ -130,13 +131,13 @@ function MyBills({ user_id }: any) {
                     Filter
                 </button>
             </caption>
-
             
               <thead>
                 
                   <tr>
                       {/* <th hidden> ID </th> */}
-                      <th> Transaction </th>
+                      {/* <th> Transaction </th> */}
+                      <th> Item </th>
                       <th> Biller </th>
                       <th> Date </th>
                       <th> Amount </th>
@@ -154,7 +155,8 @@ function MyBills({ user_id }: any) {
                   key={item.id}
                   >
                     {/* <td hidden>{item.id}</td> */}
-                      <td data-label="ID"> {item.rowid} </td>
+                      {/* <td data-label="ID"> {item.rowid} </td> */}
+                      <td data-label="Item" title={item.rowid}> {item.budolItem} </td>
                       <td data-label="Biller"> {item.billerName} </td>
                       <td data-label="Date"> {item.eventDate} </td>
                       <td data-label="Amount"> ₱ {item.amount} </td>

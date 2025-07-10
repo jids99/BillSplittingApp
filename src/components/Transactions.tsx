@@ -147,7 +147,8 @@ function Transactions({ user_id }: any) {
                     
                     <tr>
                         {/* <th hidden> ID </th> */}
-                        <th> Transaction </th>
+                        {/* <th> Transaction </th> */}
+                        <th> Item </th>
                         <th> Date </th>
                         <th> Amount </th>
                         <th> Status </th>
@@ -172,7 +173,8 @@ function Transactions({ user_id }: any) {
                     onClick={() => handleRowClick(item.id)}
                     >
                       {/* <td hidden>{item.id}</td> */}
-                        <td data-label='ID'> {item.rowid} </td>
+                        {/* <td data-label='ID'> {item.rowid} </td> */}
+                        <td data-label='Item' title={item.rowid}> {item.budolItem} </td>
                         <td data-label='Date'> {item.eventDate} </td>
                         <td data-label='Amount'> ₱ {item.amount} </td>
                         <td data-label='Status'> 

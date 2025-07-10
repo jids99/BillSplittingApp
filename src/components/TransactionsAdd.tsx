@@ -7,8 +7,9 @@ import TransactionDetailsAdd from "./TransactionDetailsAdd";
 const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
   const [status, setStatus] = useState<string>("");
   const [generatedId, setGeneratedId] = useState<string>("");
-  const [amount, setAmountInput] = useState<number>(0);
 
+  const [budolItem, setBudolItemInput] = useState<string>("");
+  const [amount, setAmountInput] = useState<number>(0);
   const [eventDate, setEventDateInput] = useState(() => {
       const today = new Date();
       return today.toISOString().split('T')[0];
@@ -25,6 +26,7 @@ const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
       const docRef = await addDoc(collection(db, "transactions"), {
         rowid: `TR${Date.now()}`,
         userid: user_id,
+        budolItem: budolItem,
         amount: amount,
         eventDate: eventDate,
         paidstatus: 0,
@@ -48,8 +50,19 @@ const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
     <>
     {modalStep === 1 && (
         <div className="modal-content">
+          <div className="form-group">
+                <label htmlFor="budolIetmInput">Budol Item</label>
+                <input
+                    id="budolIetmInput"
+                    type="text"
+                    value={budolItem}
+                    onChange={(e) => setBudolItemInput(e.target.value)}
+                    placeholder="Yung binili mo"
+                    className={styles.input}
+                />
+            </div>
             <div className="form-group">
-                <label htmlFor="amountInput">Date</label>
+                <label htmlFor="eventDateInput">Date</label>
                 <input
                     id="eventDateInput"
                     type="text"

@@ -21,6 +21,7 @@ function TransactionDetailsModal({ transaction_id}: any) {
     const [nameLookUp, setData] = useState<Participant[]>([]);
     const [totalData, setTotalData] = useState<any>();
 
+    const [budolItem, setBudolItem] = useState<any>();
     const [readableId, setReadableId] = useState<any>();
     const [totalPaid, setTotalPaid] = useState<number>();
     const [totalUnpaid, setTotalUnpaid] = useState<number>();
@@ -112,6 +113,7 @@ function TransactionDetailsModal({ transaction_id}: any) {
         setTransactionAmount(totalamount);
 
         setReadableId((result ?? null)?.get("rowid"));
+        setBudolItem((result ?? null)?.get("budolItem"));
         setVariance(totalamount - totalData);
         setTotalUnpaid(totalamount - totalpaid);
 
@@ -140,26 +142,23 @@ function TransactionDetailsModal({ transaction_id}: any) {
 
         <>
         <table className='modalTable responsive-table'>
+
             <caption>
-                <tr>
-                  <td colSpan={6}>
-                    <div className={styles.thActions}>
-                        <div className='table-title'>
-                            <h3>Payers <span className='readable-id'>| {readableId}</span></h3>
-                        </div>
-                        <div style={{display: 'flex'}}>
-                            <button 
-                            className={styles.iconBtn}
-                            onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
-                            >
-                                <FontAwesomeIcon icon={faMoneyBill} />
-                                <span className='btn-name'>Split Even</span>
-                            </button>
-                        </div>
-                    </div>
-                        <p className='hint' style={{textAlign: 'end'}}> 3. Click mo Add [+] dito naman </p>
-                  </td>
-                </tr>
+                <div className='table-title'>
+                    <h3><span className='readable-id' title={readableId} >{budolItem}
+                            </span>
+                        </h3>
+                    <p className='table-description'>PAYERS</p>
+                </div>
+                <div style={{display: 'flex'}}>
+                    <button 
+                    className={styles.iconBtn}
+                    onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
+                    >
+                        <FontAwesomeIcon icon={faMoneyBill} />
+                        <span className='btn-name'>Split Even</span>
+                    </button>
+                </div>
             </caption>
             <thead>
                 <tr>

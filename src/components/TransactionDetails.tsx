@@ -14,6 +14,7 @@ type Participant = {
         transactionid: string;
         userid: string;
         rowid: string | null;
+        budolItem: string | null;
         amount: number;
         paidstatus: string;
         created: Timestamp;
@@ -25,6 +26,7 @@ function TransactionDetails({ transaction_id }: any) {
     const [totalData, setTotalData] = useState<any>();
 
     const [readableId, setReadableId] = useState<any>();
+    const [budolItem, setBudolItem] = useState<any>();
     const [totalPaid, setTotalPaid] = useState<number>();
     const [totalUnpaid, setTotalUnpaid] = useState<number>();
     const [variance, setVariance] = useState<number>();
@@ -90,6 +92,7 @@ function TransactionDetails({ transaction_id }: any) {
                     paidstatus: data.paidstatus,
                     created: data.created,
                     rowid: (rowId ?? null)?.get("rowid"),
+                    budolItem: (rowId ?? null)?.get("budolItem"),
                     fullName: (fullName ?? null)
                 };
             })
@@ -126,6 +129,7 @@ function TransactionDetails({ transaction_id }: any) {
         const totalpaid = totalPaid ? totalPaid : 0;
 
         setReadableId((result ?? null)?.get("rowid"));
+        setBudolItem((result ?? null)?.get("budolItem"));
         setVariance(totalamount - totalData);
         setTotalUnpaid(totalamount - totalpaid);
 
@@ -146,8 +150,10 @@ function TransactionDetails({ transaction_id }: any) {
         <table className="responsive-table">
             <caption>
                 <div className='table-title'>
-                    <h2>Payers <span className='readable-id'>| {readableId}</span></h2>
-                    <p className='table-description'>MAY UTANG SA IMO</p>
+                    <h2><span className='readable-id' title={readableId} >{budolItem}
+                            </span>
+                        </h2>
+                    <p className='table-description'>PAYERS</p>
                 </div>
                 <div style={{display: 'flex'}}>
                     <button 
