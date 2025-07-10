@@ -145,8 +145,11 @@ function TransactionDetailsModal({ transaction_id}: any) {
 
             <caption>
                 <div className='table-title'>
-                    <h3><span className='readable-id' title={readableId} >{budolItem}
-                            </span>
+                    <h3>{(budolItem) ? (
+                            <span className='readable-id' title={readableId} > {budolItem} </span>
+                        ) : (
+                            <span className='danger-text' title='Walang label no, paps?'>(¬_¬") Bruh..  </span>
+                        )}
                         </h3>
                     <p className='table-description'>PAYERS</p>
                 </div>

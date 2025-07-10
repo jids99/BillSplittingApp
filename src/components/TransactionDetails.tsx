@@ -154,7 +154,7 @@ function TransactionDetails({ transaction_id }: any) {
                         {(budolItem) ? (
                             <span className='readable-id' title={readableId} > {budolItem} </span>
                         ) : (
-                            <span className='danger-text'> (¬_¬") </span>
+                            <span className='danger-text' title='Walang label no, paps?'>(¬_¬") Bruh.. </span>
                         )}
                         </h2>
                     <p className='table-description'>PAYERS</p>
