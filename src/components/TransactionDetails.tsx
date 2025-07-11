@@ -270,6 +270,7 @@ function TransactionDetails({ transaction_id }: any) {
                 overflowY: 'auto',
                 maxHeight: '80vh',
                 border: '0',
+                clipPath: "polygon(0 10px, 10px 0, 20px 10px, 30px 0, 40px 10px, 50px 0, 60px 10px, 70px 0, 80px 10px, 90px 0, 100px 10px, 100% 0, 100% 100%, 0% 100%)",
             },
             }}
         >

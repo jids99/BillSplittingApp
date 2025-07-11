@@ -11,6 +11,7 @@ import MyBills from './MyBills';
 
 type Transaction = {
   id: string;
+  budolItem: string;
   amount: number;
 };
 
@@ -110,6 +111,7 @@ function Transactions({ user_id }: any) {
       if (!editing) return;
       try {
         await updateDoc(doc(db, "transactions", editing.id), {
+          budolItem: editing.budolItem,
           amount: editing.amount
         });
         setEditing(null);
@@ -240,7 +242,7 @@ function Transactions({ user_id }: any) {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
             },
             content: {
-                backgroundColor: '#242424',
+                backgroundColor: 'white',
                 top: '50%',
                 left: '50%',
                 right: 'auto',
@@ -249,6 +251,7 @@ function Transactions({ user_id }: any) {
                 transform: 'translate(-50%, -50%)',
                 padding: '20px',
                 borderRadius: '8px',
+                clipPath: "polygon(0 10px, 10px 0, 20px 10px, 30px 0, 40px 10px, 50px 0, 60px 10px, 70px 0, 80px 10px, 90px 0, 100px 10px, 100% 0, 100% 100%, 0% 100%)",
             },
           }} 
           >
@@ -260,6 +263,19 @@ function Transactions({ user_id }: any) {
             </div>
             <div className="modal-body">
               <div className="modal-content">
+                <div className="form-group">
+                  <label htmlFor="budolIetmInput">Budol Item</label>
+                  <input
+                      id="budolIetmInput"
+                      type="text"
+                      value={editing.budolItem}
+                      onChange={(e) =>
+                        setEditing({ ...editing, budolItem: String(e.target.value) })
+                      }
+                      placeholder="Yung binili mo"
+                      className={styles.input}
+                  />
+                </div>
                 <div className="form-group">
                   <label className="block" htmlFor="amountInput">Amount</label>
                   <input
@@ -302,9 +318,12 @@ function Transactions({ user_id }: any) {
                 transform: 'translate(-50%, -50%)',
                 padding: '20px',
                 borderRadius: '8px',
+                clipPath: "polygon(0 10px, 10px 0, 20px 10px, 30px 0, 40px 10px, 50px 0, 60px 10px, 70px 0, 80px 10px, 90px 0, 100px 10px, 100% 0, 100% 100%, 0% 100%)",
             },
             }}
         >
+
+          <div className='receipt-zigzag'>
             <div className='modal-header'>
                 <h2>Add Budol</h2>
                 <button onClick={closeModals}>
@@ -314,6 +333,7 @@ function Transactions({ user_id }: any) {
             <div className='modal-body'>
                 <TransactionsAdd user_id={user_id} onAddSuccess={handleAddedTransaction}/>
             </div>
+          </div>
         </Modal>
             
         </>
