@@ -1,11 +1,8 @@
 @use '../abstracts/variables' as *;
 
-
-
 table {
   display: inline-block;
   table-layout: auto;
-  // border: 1px solid white;
   border-radius: 1rem;
   padding: 1rem;
   background-color: white;
@@ -62,7 +59,7 @@ table {
 
 @media screen and (max-width: 768px) {
 
-  .readable-id, .btn-name, .table-description {
+  .btn-name, .table-description {
     display: none;
   }
 
@@ -108,7 +105,7 @@ table {
   .responsive-table td::before {
     content: attr(data-label);
     font-weight: bold;
-    color: white;
+    color: $OliveGray;
   }
 
 }
