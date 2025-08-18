@@ -33,7 +33,12 @@ table {
     align-items: center;
   }
 
-  thead, tbody {
+  tbody {
+    display: table-row-group !important; /* or just remove display setting entirely */
+    width: auto !important;; /* optional, but fine */
+  }
+
+  thead {
     display: table-header-group; /* or just remove display setting entirely */
     width: 100%; /* optional, but fine */
   }
@@ -67,8 +72,12 @@ table {
     display: block;
   }
 
-  td {
-    min-width: 13rem;
+  .tableContainer {
+    min-width: 80dvw;
+  }
+
+  .responsive-table {
+    width: 100%;
   }
 
   .actionsContainer {

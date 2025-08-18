@@ -126,10 +126,10 @@ function MyBills({ user_id }: any) {
                     <h2>My Bills</h2>
                     <p className='table-description'>MGA BAYARIN MO</p>
                 </div>
-                <button className={styles.iconBtn}>
+                {/* <button className={styles.iconBtn}>
                     <FontAwesomeIcon icon={faSliders} /> 
                     Filter
-                </button>
+                </button> */}
             </caption>
             
               <thead>
@@ -201,7 +201,7 @@ function MyBills({ user_id }: any) {
               <tfoot>
                 <tr>
                     {/* show all comp */}
-                    <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
+                    {/* <td colSpan={6} style={{textAlign: 'end'}}>Show all</td>  */}
                 </tr>
               </tfoot>
           </table>

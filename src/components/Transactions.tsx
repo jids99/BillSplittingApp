@@ -153,7 +153,7 @@ function Transactions({ user_id }: any) {
                         <th> Item </th>
                         <th> Date </th>
                         <th> Amount </th>
-                        <th> Status </th>
+                        {/* <th> Status </th> */}
                         {/* <th> Created </th> */}
                         <td></td>
                     </tr>
@@ -185,11 +185,11 @@ function Transactions({ user_id }: any) {
                         </td>
                         <td data-label='Date'> {item.eventDate} </td>
                         <td data-label='Amount'> ₱ {item.amount} </td>
-                        <td data-label='Status'> 
+                        {/* <td data-label='Status'> 
                           <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
                               {item.paidstatus ? 'Paid' : 'Unpaid'}
                           </div> 
-                        </td>
+                        </td> */}
                         {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
                         <td data-label='Actions' >
                           <div className='actionsContainer'>
@@ -219,7 +219,7 @@ function Transactions({ user_id }: any) {
                 <tfoot>
                   <tr>
                     {/* show all comp */}
-                    <td colSpan={6} style={{textAlign: 'end'}}>Show all</td> 
+                    {/* <td colSpan={6} style={{textAlign: 'end'}}>Show all</td>  */}
                   </tr>
                 </tfoot>
             </table>
