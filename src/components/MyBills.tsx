@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, updateDoc} from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faUndo, faSliders} from '@fortawesome/free-solid-svg-icons';
-import styles from './Transactions.module.css';
+import { faCheck, faUndo} from '@fortawesome/free-solid-svg-icons';
 
 type Transaction = {
     id: string;
