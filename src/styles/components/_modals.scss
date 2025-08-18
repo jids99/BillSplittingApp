@@ -1,8 +1,5 @@
 @use '../abstracts/variables' as *;
 
-
-
-
 .modal-content {
   display: flex;
   flex-direction: column;
@@ -10,10 +7,6 @@
   align-items: center;
   gap: .5rem;
   margin: 1rem 0;
-}
-
-.modal-content * {
-  width: 100%;
 }
 
 .modal-content p {

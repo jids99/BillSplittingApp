@@ -43,19 +43,20 @@ function Transactions({ user_id }: any) {
     setEditing(null);
   };
 
-  const deleteTransaction = async (id: string) => {
+  const deleteTransaction = async () => {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
       if (!confirmed) return;
+      if (!editing?.id) return;
 
       try {
-          await deleteDoc(doc(db, "transactions", id));
+          await deleteDoc(doc(db, "transactions", editing?.id));
           console.log("Deleted");
           setSelectedTransactionId(null);
       } catch (error) {
           console.error("Error deleting:", error);
       }
 
-      const q_delete_participations = query(collection(db, "participants"), where("transactionid", "==", id));
+      const q_delete_participations = query(collection(db, "participants"), where("transactionid", "==", editing?.id));
       const snapshot = await getDocs(q_delete_participations);
 
       if (snapshot.empty) {
@@ -199,12 +200,7 @@ function Transactions({ user_id }: any) {
                             >
                               <FontAwesomeIcon icon={faPenToSquare} />
                             </button>
-                            <button
-                                onClick={() => deleteTransaction(item.id)}
-                                className="danger"
-                            >
-                                <FontAwesomeIcon icon={faTrash} />
-                            </button>
+                            
                           </div>
                         </td>
                       </tr>
@@ -288,14 +284,22 @@ function Transactions({ user_id }: any) {
                     className={styles.input}
                   />
                 </div>
-                <div className="btn-container">
-                  <button
-                    className="bg-green-500 text-white px-3 py-1 rounded"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </button>
-                </div>
+                <button
+                  className="vertical-btn "
+                  onClick={handleSave}
+                >
+                  Save
+                </button>
+
+                <hr />
+
+                <button
+                    onClick={() => deleteTransaction()}
+                    className="vertical-btn danger"
+                >
+                    <FontAwesomeIcon icon={faTrash} />
+                    Delete 
+                </button> 
               </div>
             </div>
         </Modal>
