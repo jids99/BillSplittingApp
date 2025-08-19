@@ -46,12 +46,13 @@ function Transactions({ user_id }: any) {
   const deleteTransaction = async () => {
       const confirmed = window.confirm("Are you sure you want to delete this entry?");
       if (!confirmed) return;
-      if (!editing?.id) return;
+      if (!editing) return;
 
       try {
           await deleteDoc(doc(db, "transactions", editing?.id));
           console.log("Deleted");
           setSelectedTransactionId(null);
+          setEditing(null);
       } catch (error) {
           console.error("Error deleting:", error);
       }
