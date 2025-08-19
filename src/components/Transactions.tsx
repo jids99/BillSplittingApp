@@ -175,6 +175,7 @@ function Transactions({ user_id }: any) {
                     <tr 
                     key={item.id}
                     onClick={() => handleRowClick(item.id)}
+                    style={{cursor: 'pointer'}}
                     >
                       {/* <td hidden>{item.id}</td> */}
                         {/* <td data-label='ID'> {item.rowid} </td> */}
@@ -274,7 +275,7 @@ function Transactions({ user_id }: any) {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="block" htmlFor="amountInput">Amount</label>
+                  <label className="block" htmlFor="amountInput">Total Amount</label>
                   <input
                     id='amountInput'
                     type="text"

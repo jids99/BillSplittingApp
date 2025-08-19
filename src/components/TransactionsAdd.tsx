@@ -87,7 +87,7 @@ const TransactionsAdd = ({ user_id, onAddSuccess }: any) => {
             <div className="modal-footer">
               <button 
                   onClick={handleAdd}
-                  className=""
+                  className="vertical-btn"
               >
                   Next
               </button>

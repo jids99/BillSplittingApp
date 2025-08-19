@@ -6,7 +6,6 @@
   justify-content: center;
   align-items: center;
   gap: .5rem;
-  margin: 1rem 0;
 }
 
 .modal-content p {
@@ -30,6 +29,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .modalTable {

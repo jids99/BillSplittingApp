@@ -159,7 +159,7 @@ function TransactionDetails({ transaction_id }: any) {
                         </h2>
                     <p className='table-description'>PAYERS</p>
                 </div>
-                <div style={{display: 'flex'}}>
+                <div style={{display: 'flex', gap: '.5rem'}}>
                     <button 
                     className={styles.iconBtn}
                     onClick={openSplitModal}
@@ -230,20 +230,19 @@ function TransactionDetails({ transaction_id }: any) {
                 )}
           
                 <tr>
-                    <td>
-                        Total (Accounted): {totalData} ({totalAccountedPercent}%) <br />
-                        {(variance ?? 0) > 1 ? (
-                            <span>Unaccounted {variance}</span>
-                        ) : null}
-                    </td>
-                </tr>
-       
-                <tr>
-                    <td>
-                        Paid: {totalPaid} ({totalPaidPercent}%) <br />
-                        {totalUnpaid ? (
-                                <span>Unpaid {totalUnpaid} </span>
-                        ) : null}
+                    <td className='totalsRow'>
+                        <span>
+                            Total (Accounted): {totalData} ({totalAccountedPercent}%) <br />
+                            {(variance ?? 0) > 1 ? (
+                                <span>Unaccounted {variance}</span>
+                            ) : null}
+                        </span>
+                        <span>
+                            Paid: {totalPaid} ({totalPaidPercent}%) <br />
+                            {totalUnpaid ? (
+                                    <span>Unpaid {totalUnpaid} </span>
+                            ) : null}
+                        </span>
                     </td>
                 </tr>
                 

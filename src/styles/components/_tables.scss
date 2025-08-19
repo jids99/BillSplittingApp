@@ -51,6 +51,12 @@ table {
         font-size: $fs-s;
     }
 
+    .totalsRow {
+      display: flex;
+      gap: .25rem;
+      flex-direction: column;
+    }
+
 .responsive-table {
   border-collapse: collapse;
   margin-bottom: 2rem;

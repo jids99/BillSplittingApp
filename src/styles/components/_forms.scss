@@ -3,6 +3,7 @@
 input {
   padding: .45rem .9rem;
   max-height: 2.5rem;
+  width: 100%;
 }
 
 .form-group {
@@ -11,6 +12,7 @@ input {
   gap: .5rem;
   justify-content: center;
   align-items: start;
+  width: 100%;
 }
 
 .form-group label {
@@ -28,6 +30,7 @@ input {
 
 select {
   padding: .45rem .9rem;
+  width: 100%;
 }
 
 
