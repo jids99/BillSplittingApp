@@ -3,7 +3,6 @@ import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, onSnapshot, where, doc, getDoc, Timestamp} from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
-import styles from './Transactions.module.css';
 import { acceptSplit } from './Utils';
 
 type Participant = {
