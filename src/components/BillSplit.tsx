@@ -213,8 +213,10 @@ function BillSplit({ transaction_id }: any) {
                 </tbody>
             </table>
 
+            <hr></hr>
+
             <button
-                className={styles.iconBtn}
+                className="vertical-btn"
                 onClick={() => {acceptSplit(transaction_id, userTuple, totalPerSplitter)}}
             >
                 <FontAwesomeIcon icon={faSave} />

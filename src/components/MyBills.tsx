@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { db } from "../firebase"; // Make sure path is correct
 import { collection, query, onSnapshot, where, doc, getDoc, Timestamp, updateDoc} from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faUndo} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClose, faUndo} from '@fortawesome/free-solid-svg-icons';
+import Modal from 'react-modal';
+import TransactionHistory from './TransactionHistory';
 
 type Transaction = {
     id: string;
@@ -19,6 +21,19 @@ type Transaction = {
 
 function MyBills({ user_id }: any) {
   const [data, setData] = useState<any[]>([]);
+  const [pendingPaid, setPendingPaid] = useState<{ [id: string]: boolean }>({});
+  const delayPaid = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  const [countdown, setCountdown] = useState<{ [id: string]: number }>({});
+
+  const timeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const intervals = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map());
+  
+    const [openViewBills, setOpenViewBills] = useState(false);
+
+    const closeModals = () => {
+        setOpenViewBills(false);
+    };
 
     const getTransaction = async (transaction_id: any): Promise<Map<string, any> | null> => {
         try {
@@ -56,28 +71,88 @@ function MyBills({ user_id }: any) {
     };
 
     const markAsPaid = async (id: string) => {
-        try {
-            await updateDoc(doc(db, "participants", id), {
-                paidstatus: 1
+        console.log('Pending payment');
+        setPendingPaid(prev => ({ ...prev, [id]: true }));
+        setCountdown(prev => ({ ...prev, [id]: 5 }));
+
+        const intervalId = setInterval(() => {
+            setCountdown(prev => {
+                const newTime = (prev[id] ?? 1) - 1;
+                if (newTime <= 0) {
+                clearInterval(intervalId);
+                return { ...prev, [id]: 0 };
+                }
+                return { ...prev, [id]: newTime };
             });
-        } catch (err) {
-            console.error("Update failed:", err);
-        }
+            }, 1000);
+        intervals.current.set(id, intervalId);
+
+        const timeout = setTimeout(async () => {
+            try {
+                await updateDoc(doc(db, "participants", id), {
+                    paidstatus: 1
+                });
+                setPendingPaid(prev => {
+                    const copy = { ...prev };
+                    delete copy[id];
+                    return copy;
+                });
+                setCountdown(prev => {
+                    const copy = { ...prev };
+                    delete copy[id];
+                    return copy;
+                });
+                delayPaid.current.delete(id);
+                console.log('Paid!');
+            } catch (err) {
+                console.error("Update failed:", err);
+            }
+        }, 5000);
+        delayPaid.current.set(id, timeout);
+
     };
 
     const undoPayment = async (id: string) => {
-        try {
-            await updateDoc(doc(db, "participants", id), {
-                paidstatus: 0
-            });
-        } catch (err) {
-            console.error("Update failed:", err);
+        // try {
+        //     await updateDoc(doc(db, "participants", id), {
+        //         paidstatus: 0
+        //     });
+        // } catch (err) {
+        //     console.error("Update failed:", err);
+        // }
+
+        const timeoutId = timeouts.current.get(id);
+        const intervalId = intervals.current.get(id);
+
+        if (timeoutId) clearTimeout(timeoutId);
+        if (intervalId) clearInterval(intervalId);
+
+        timeouts.current.delete(id);
+        intervals.current.delete(id);
+
+        console.log('Undo payment');
+       const timeout = delayPaid.current.get(id);
+        if (timeout) {
+            clearTimeout(timeout);
+            delayPaid.current.delete(id);
         }
+
+        setPendingPaid(prev => {
+            const copy = { ...prev };
+            delete copy[id];
+            return copy;
+        });
+        setCountdown(prev => {
+            const copy = { ...prev };
+            delete copy[id];
+            return copy;
+        });
     };
 
     const q = query(
         collection(db, "participants"),
         where("userid", "==", user_id),
+        where("paidstatus", "==", 0)
     );
 
     useEffect(() => {
@@ -172,12 +247,13 @@ function MyBills({ user_id }: any) {
                       </td>
                       {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
                       <td data-label="Actions">
-                        {item.paidstatus ? (
+                        {pendingPaid[item.id] ? (
                             <button
                                 onClick={() => undoPayment(item.id)}
-                                className="bruh"
+                                className=" vertical-btn bruh"
                             >
                                 <FontAwesomeIcon icon={faUndo} />
+                                <span>{countdown[item.id]}s</span>
                             </button>
                         ) : (
                             <button
@@ -193,17 +269,60 @@ function MyBills({ user_id }: any) {
                   ))
                   
                 ) : (
-                  <tr><td colSpan={6}>Wala</td></tr>
+                  <tr><td colSpan={6}>Wala bayarin, sana all</td></tr>
                 )}
                   
               </tbody>
               <tfoot>
                 <tr>
                     {/* show all comp */}
-                    {/* <td colSpan={6} style={{textAlign: 'end'}}>Show all</td>  */}
+                    <td colSpan={6} style={{textAlign: 'end'}}>
+                        <button 
+                        onClick={() => setOpenViewBills(true)}
+                        > 
+                            Show all 
+                        </button>
+                    </td> 
                 </tr>
               </tfoot>
           </table>
+
+          <Modal
+            isOpen={openViewBills}
+            onRequestClose={closeModals}
+            style={{
+            overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            content: {
+                backgroundColor: 'white',
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '20px',
+                borderRadius: '8px',
+                clipPath: "polygon(0 10px, 10px 0, 20px 10px, 30px 0, 40px 10px, 50px 0, 60px 10px, 70px 0, 80px 10px, 90px 0, 100px 10px, 100% 0, 100% 100%, 0% 100%)",
+            },
+            }}
+        >
+
+          <div className='receipt-zigzag'>
+            <div className='modal-header'>
+                <h2>Transaction History </h2>
+                <button 
+                    onClick={closeModals}
+                >
+                    <FontAwesomeIcon icon={faClose} />
+                </button>
+            </div>
+            <div className='modal-body'>
+                <TransactionHistory user_id={user_id}  />
+            </div>
+          </div>
+        </Modal>
             
         </>
     )
