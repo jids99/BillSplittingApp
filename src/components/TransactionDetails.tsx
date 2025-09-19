@@ -252,25 +252,11 @@ function TransactionDetails({ transaction_id }: any) {
         <Modal
             isOpen={addKalahokModalIsOpen}
             onRequestClose={closeModals}
+            className={'modal-card'}
             style={{
             overlay: {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            },
-            content: {
-                backgroundColor: 'white',
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                padding: '20px',
-                borderRadius: '8px',
-                overflowY: 'auto',
-                maxHeight: '80vh',
-                border: '0',
-                clipPath: "polygon(0 10px, 10px 0, 20px 10px, 30px 0, 40px 10px, 50px 0, 60px 10px, 70px 0, 80px 10px, 90px 0, 100px 10px, 100% 0, 100% 100%, 0% 100%)",
-            },
+            }
             }}
         >
             <div className='modal-Container'>
