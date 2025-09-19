@@ -84,6 +84,10 @@ table {
     font-size: $fs-s;
   }
 
+  .tableContainer {
+    max-width: 475px;
+  }
+
 @media screen and (max-width: 768px) {
 
   .btn-name, .table-description {
