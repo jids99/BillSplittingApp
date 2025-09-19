@@ -1,17 +1,20 @@
 
 .dashboardContent {
-    width: 100%;
+    width: 100vw;
     height: 100%;
+    background-color: rgba(105, 104, 104, .2);
 }
-
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5vw 4vw;
+
 }
 
 .body {
   padding: 1.5vw 4vw;
+  display: flex;
+  justify-content: center;
 }
