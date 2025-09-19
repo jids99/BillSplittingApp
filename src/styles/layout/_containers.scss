@@ -10,3 +10,9 @@
     100px 10px, 100% 0, 100% 100%, 0% 100%
   );
 }
+
+.transactionsContainer {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}

@@ -130,7 +130,7 @@ function Transactions({ user_id }: any) {
 
         <>
 
-        <div className={styles.transactionsContainer}>
+        <div className='transactionsContainer'>
 
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <div className='tableContainer'>
