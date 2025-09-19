@@ -47,7 +47,7 @@ table {
       background-color: rgba(105, 104, 104, .15);
       transition: background-color 0.15s ease-in-out;
     }
-    
+
     td, th {
       width: auto;
     }
@@ -65,12 +65,23 @@ table {
 .responsive-table {
   border-collapse: collapse;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
   .responsive-table th, 
   .responsive-table td {
     padding: 0.5rem;
     text-align: left;
+  }
+
+    .actionsContainer {
+      display: flex;
+      gap: .15rem;
+      align-items: center;
+    }
+
+  .btn-name {
+    font-size: $fs-s;
   }
 
 @media screen and (max-width: 768px) {
@@ -89,11 +100,6 @@ table {
 
   .responsive-table {
     width: 100%;
-  }
-
-  .actionsContainer {
-    display: flex;
-    gap: .15rem;
   }
 
   caption h2 {

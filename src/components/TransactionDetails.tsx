@@ -159,7 +159,7 @@ function TransactionDetails({ transaction_id }: any) {
                         </h2>
                     <p className='table-description'>PAYERS</p>
                 </div>
-                <div style={{display: 'flex', gap: '.5rem'}}>
+                <div className='actionsContainer'>
                     <button 
                     className={styles.iconBtn}
                     onClick={openSplitModal}

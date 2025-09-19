@@ -132,99 +132,102 @@ function Transactions({ user_id }: any) {
 
         <div className={styles.transactionsContainer}>
 
-          <div className='tableContainer'>
-            <MyBills user_id={user_id} />
-          </div>
-          <div className='tableContainer'>
-            <table className="responsive-table">
-              <caption>
-                <div className='table-title'>
-                  <h2>Transactions</h2>
-                  <p className='table-description'>MGA CNOVER MO</p>
-                </div>
-                <button onClick={openAddModal}>
-                <FontAwesomeIcon icon={faPlus} />
-                </button>
-                <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
-              </caption>
-                <thead>
-                    
-                    <tr>
-                        {/* <th hidden> ID </th> */}
-                        {/* <th> Transaction </th> */}
-                        <th> Item </th>
-                        <th> Date </th>
-                        <th> Amount </th>
-                        {/* <th> Status </th> */}
-                        {/* <th> Created </th> */}
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className='hint'>
-                        <p className='hint' style={{textAlign: 'end'}}> 
-                          2. Tapos click ka isa dito 
-                        </p>
-                      </td>
-                  </tr>
-
-                  {data && data.length ? (
-                    
-                    data.map(item => (
-                    <tr 
-                    key={item.id}
-                    onClick={() => handleRowClick(item.id)}
-                    style={{cursor: 'pointer'}}
-                    >
-                      {/* <td hidden>{item.id}</td> */}
-                        {/* <td data-label='ID'> {item.rowid} </td> */}
-                        <td data-label='Item' title={item.rowid}> 
-                          {(item.budolItem) ? (
-                            <span className='readable-id' title={item.rowid} > {item.budolItem} </span>
-                          ) : (
-                              <b className='danger-text'> (¬_¬") </b>
-                          )}
-                        </td>
-                        <td data-label='Date'> {item.eventDate} </td>
-                        <td data-label='Amount'> ₱ {item.amount} </td>
-                        {/* <td data-label='Status'> 
-                          <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
-                              {item.paidstatus ? 'Paid' : 'Unpaid'}
-                          </div> 
-                        </td> */}
-                        {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
-                        <td data-label='Actions' >
-                          <div className='actionsContainer'>
-                            <button
-                              className=""
-                              onClick={() => openEditModal(item)}
-                            >
-                              <FontAwesomeIcon icon={faPenToSquare} />
-                            </button>
-                            
-                          </div>
-                        </td>
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div className='tableContainer'>
+              <MyBills user_id={user_id} />
+            </div>
+            <div className='tableContainer'>
+              <table className="responsive-table">
+                <caption>
+                  <div className='table-title'>
+                    <h2>Transactions</h2>
+                    <p className='table-description'>MGA CNOVER MO</p>
+                  </div>
+                  <button onClick={openAddModal}>
+                  <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                  <p className='hint' style={{textAlign: 'end'}}> 1. Click mo Add [+] paps </p>
+                </caption>
+                  <thead>
+                      
+                      <tr>
+                          {/* <th hidden> ID </th> */}
+                          {/* <th> Transaction </th> */}
+                          <th> Item </th>
+                          <th> Date </th>
+                          <th> Amount </th>
+                          {/* <th> Status </th> */}
+                          {/* <th> Created </th> */}
+                          <td></td>
                       </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className='hint'>
+                          <p className='hint' style={{textAlign: 'end'}}> 
+                            2. Tapos click ka isa dito 
+                          </p>
+                        </td>
+                    </tr>
+
+                    {data && data.length ? (
+                      
+                      data.map(item => (
+                      <tr 
+                      key={item.id}
+                      onClick={() => handleRowClick(item.id)}
+                      style={{cursor: 'pointer'}}
+                      >
+                        {/* <td hidden>{item.id}</td> */}
+                          {/* <td data-label='ID'> {item.rowid} </td> */}
+                          <td data-label='Item' title={item.rowid}> 
+                            {(item.budolItem) ? (
+                              <span className='readable-id' title={item.rowid} > {item.budolItem} </span>
+                            ) : (
+                                <b className='danger-text'> (¬_¬") </b>
+                            )}
+                          </td>
+                          <td data-label='Date'> {item.eventDate} </td>
+                          <td data-label='Amount'> ₱ {item.amount} </td>
+                          {/* <td data-label='Status'> 
+                            <div className={item.paidstatus ? 'badge success' : 'badge warning'}>
+                                {item.paidstatus ? 'Paid' : 'Unpaid'}
+                            </div> 
+                          </td> */}
+                          {/* <td>{new Date(item.created.seconds * 1000).toLocaleString()}</td> */}
+                          <td data-label='Actions' >
+                            <div className='actionsContainer'>
+                              <button
+                                className=""
+                                onClick={() => openEditModal(item)}
+                              >
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </button>
+                              
+                            </div>
+                          </td>
+                        </tr>
+                      
+                      ))
+                      
+                    ) : (
+                      <tr><td colSpan={6}>Wala</td></tr>
+                    )}
                     
-                    ))
-                    
-                  ) : (
-                    <tr><td colSpan={6}>Wala</td></tr>
-                  )}
-                  
-                </tbody>
-                <tfoot>
-                  <tr>
-                    {/* show all comp */}
-                    {/* <td colSpan={6} style={{textAlign: 'end'}}>Show all</td>  */}
-                  </tr>
-                </tfoot>
-            </table>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      {/* show all comp */}
+                      {/* <td colSpan={6} style={{textAlign: 'end'}}>Show all</td>  */}
+                    </tr>
+                  </tfoot>
+              </table>
+            </div>
           </div>
+
 
           {selectedTransactionId && (
-            <div className='tableContainer'>
+            <div className='tableContainer receipt-style'>
               <TransactionDetails user={user_id} transaction_id={selectedTransactionId} isCalledOnModal={false}/>
             </div>
           )}
