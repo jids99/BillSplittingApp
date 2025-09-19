@@ -43,6 +43,11 @@ table {
     width: 100%; /* optional, but fine */
   }
 
+    tbody tr:hover {
+      background-color: rgba(105, 104, 104, .15);
+      transition: background-color 0.15s ease-in-out;
+    }
+    
     td, th {
       width: auto;
     }
