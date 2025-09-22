@@ -39,11 +39,11 @@ const TransactionDetailsAdd = ({ transaction_id }: any) => {
         paidstatus: 0,
         created: Timestamp.now()
       });
-      setStatus("✅ Puro ka gastos!");
+      setStatus("Puro ka gastos!");
       setAmountInput(0);
     } catch (error) {
       console.error("Error saving to Firestore:", error);
-      setStatus("❌ Mali");
+      setStatus("Mali");
     }
   };
 

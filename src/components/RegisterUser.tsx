@@ -13,11 +13,11 @@ const RegisterUser: React.FC = () => {
         name,
         created: Timestamp.now()
       });
-      setStatus("✅ Pasok ka na paps " + name);
+      setStatus("Pasok ka na paps " + name);
       setNameInput("");
     } catch (error) {
       console.error("Error saving to Firestore:", error);
-      setStatus("❌ Mali");
+      setStatus("Mali");
     }
   };
 
